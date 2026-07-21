@@ -61,6 +61,19 @@ master) and download a fresh shareable copy whenever you update something.
 - Contact now includes **WhatsApp** (+993 68 21 11 8) and **Telegram**
   (@soyli_s).
 
+## Contact form → your inbox
+
+The contact form delivers messages to **sahedowasoyli8@gmail.com** using
+FormSubmit (a free service, no account needed).
+
+**One-time activation:** the very first time someone submits the form on the
+live page, FormSubmit sends you an e-mail titled roughly *"Activate your form"* —
+open it and click **Activate Form** once. After that, every message arrives in
+your inbox automatically (with the sender's name, e-mail and message). If you
+never submitted it yet, just fill it in once yourself and click the activation
+link. If the page is opened offline as a local file, the form falls back to
+opening the visitor's e-mail app addressed to you.
+
 ### Notes
 
 - Image slots accept image files (PNG/JPEG/WebP…). For **videos**, upload a
