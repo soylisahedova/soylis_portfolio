@@ -24,13 +24,25 @@ saved **in the browser you uploaded them from** and are restored automatically
 every time you reopen the page. Reloading, closing the tab, and reopening the
 file all keep your images.
 
+## Sharing your finished portfolio
+
+The saves above live in *your* browser, not inside the file itself — so just
+emailing `index.html` would arrive with empty slots. To send a copy with your
+images **baked in**:
+
+1. Fill in the slots you want.
+2. Click **"Download shareable copy"** (bottom-right of the page).
+3. You'll get `soyli-portfolio-shareable.html`.
+
+Send *that* file. It opens on any computer/browser with your images already in
+place, as a clean, **read-only** portfolio — no edit controls, no "Edit mode"
+badge. Keep working in `index.html` (your editable master) and re-download a new
+shareable copy whenever you update something.
+
 ### Two things worth knowing
 
-- **Persistence is per-browser.** The saved images live in *this* browser's
-  local storage, not inside the file's bytes. If you copy `index.html` to
-  another computer or send it to someone, the slots will be empty there — they'd
-  fill it in with their own uploads. (If you need a shareable copy with your
-  images baked in, that's a quick follow-up — an "Export" button can be added.)
+- **`index.html` = your editable master** (uploads save to this browser).
+  **The downloaded copy = the shareable, read-only version** (images baked in).
 - **Videos:** slots that mention "MP4" only accept a still image (a poster
   frame) — the component is image-only.
 
