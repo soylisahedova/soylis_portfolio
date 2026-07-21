@@ -9,7 +9,12 @@ Bottom-right there's a **✎ Edit page** button. Click it to turn editing on
 (click again — **✓ Done editing** — to turn it off). While editing is on:
 
 - **Any text** — click it and type to rewrite it. Headings, paragraphs,
-  labels, stats, the `[bracketed placeholders]` — all editable.
+  labels, stats, the `[bracketed placeholders]` — all editable, and the box
+  grows automatically as you type. A **formatting bar** appears at the top of
+  the screen: change the **font**, **size** (A− / A+), **bold / italic /
+  underline**, **text colour**, and **alignment**. **＋ Text** adds a brand-new
+  text block right after whatever you're editing (and you can delete blocks you
+  added).
 - **Any link** — click it and a small box opens. Paste any URL (website,
   Google Drive, YouTube, a PDF link…) **or** click *Attach file…* to attach a
   file from your computer. This is how you set the CV link, the "Open my full
