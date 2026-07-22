@@ -1538,12 +1538,12 @@ body.ed-on .ed-main{background:#9DB89A;}
       <div>
         <div style="font-size:12px; letter-spacing:.28em; text-transform:uppercase; color:#E8D5A3; margin-bottom:16px;">Contact</div>
         <h2 style="font-family:'Wix Madefor Display'; font-weight:700; font-size:clamp(30px,3.4vw,44px); letter-spacing:-.02em; margin:0 0 34px;">Let's work together</h2>
-        <form action="https://formsubmit.co/sahedowasoyli8@gmail.com" method="POST" style="display:flex; flex-direction:column; gap:16px;"><input type="hidden" name="_subject" value="New portfolio enquiry"><input type="hidden" name="_captcha" value="false"><input type="hidden" name="_template" value="table"><input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+        <form action="https://formsubmit.co/sahedowasoyli8@gmail.com" method="POST" target="ss_frame" style="display:flex; flex-direction:column; gap:16px;"><input type="hidden" name="_subject" value="New portfolio enquiry"><input type="hidden" name="_captcha" value="false"><input type="hidden" name="_template" value="table"><input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
           <input type="text" name="name" placeholder="Your name" style="background:#0E0E10; border:1px solid rgba(255,255,255,.1); border-radius:14px; padding:15px 18px; color:#F2EEE6; font-family:'IBM Plex Sans'; font-size:15px; outline:none;" class="x57">
           <input type="email" name="email" placeholder="Email address" style="background:#0E0E10; border:1px solid rgba(255,255,255,.1); border-radius:14px; padding:15px 18px; color:#F2EEE6; font-family:'IBM Plex Sans'; font-size:15px; outline:none;" class="x58">
           <textarea name="message" rows="5" placeholder="Tell me about your project" style="background:#0E0E10; border:1px solid rgba(255,255,255,.1); border-radius:14px; padding:15px 18px; color:#F2EEE6; font-family:'IBM Plex Sans'; font-size:15px; outline:none; resize:vertical;" class="x59"></textarea>
           <button type="submit" style="align-self:flex-start; font-size:15px; font-weight:600; color:#0E0E10; background:#E8D5A3; padding:14px 30px; border:none; border-radius:100px; cursor:pointer; font-family:'IBM Plex Sans';" class="x60">Send message</button>
-        </form>
+        </form><iframe name="ss_frame" title="Message sender" style="display:none;width:0;height:0;border:0" aria-hidden="true"></iframe>
       </div>
       <div style="display:flex; flex-direction:column; gap:30px;">
         <div>
@@ -1894,45 +1894,32 @@ body.ed-on .ed-main{background:#9DB89A;}
   }
 
   // ---- contact form -> delivered to Soyli's inbox via FormSubmit ------------
-  // FormSubmit posts the message server-side (no backend needed) and e-mails it
-  // to CONTACT_TO. If that request can't run (e.g. opened as a local file with
-  // no network / blocked origin) it falls back to opening the visitor's mail app.
+  // The form does a native POST into a hidden iframe (target="ss_frame"), so it
+  // works BOTH from a local file and when hosted — no fetch/CORS, and never
+  // opens the visitor's mail app. FormSubmit e-mails each message to CONTACT_TO
+  // (after a one-time activation click the first time).
   var CONTACT_TO = "sahedowasoyli8@gmail.com";
   function initContactForm() {
     var form = document.querySelector("#contact-form form");
     if (!form) return;
+    var frame = document.querySelector('iframe[name="ss_frame"]');
+    var btn = form.querySelector('button[type="submit"]');
+    var label = btn ? btn.textContent : "";
+    var pending = false, timer = null;
+    function reset() { if (btn) { btn.disabled = false; btn.textContent = label; } pending = false; clearTimeout(timer); }
     form.addEventListener("submit", function (e) {
-      if (editing) return;
-      e.preventDefault();
-      var fd = new FormData(form);
-      var name = (fd.get("name") || "").toString().trim();
-      var mail = (fd.get("email") || "").toString().trim();
-      var msg = (fd.get("message") || "").toString().trim();
-      var btn = form.querySelector('button[type="submit"]');
-      var label = btn ? btn.textContent : "";
+      if (editing) { e.preventDefault(); return; }        // don't send while editing text
+      // let the native submit POST into the hidden iframe
       if (btn) { btn.disabled = true; btn.textContent = "Sending…"; }
-      function done(ok) { if (btn) { btn.disabled = false; btn.textContent = label; } if (ok) form.reset(); }
-      function mailtoFallback() {
-        var body = "Name: " + name + "\nEmail: " + mail + "\n\n" + msg;
-        window.location.href = "mailto:" + CONTACT_TO +
-          "?subject=" + encodeURIComponent("Portfolio enquiry" + (name ? " from " + name : "")) +
-          "&body=" + encodeURIComponent(body);
-        toast("Opening your e-mail app to send…");
-      }
-      try {
-        fetch("https://formsubmit.co/ajax/" + encodeURIComponent(CONTACT_TO), {
-          method: "POST",
-          headers: { "Content-Type": "application/json", "Accept": "application/json" },
-          body: JSON.stringify({ name: name, email: mail, message: msg,
-            _subject: "New portfolio enquiry" + (name ? " from " + name : ""),
-            _template: "table", _captcha: "false" })
-        }).then(function (r) { return r.json(); })
-          .then(function (d) {
-            if (d && (d.success === true || d.success === "true")) { toast("Message sent — thank you! It will reach Soyli by e-mail."); done(true); }
-            else { done(false); mailtoFallback(); }
-          })
-          .catch(function () { done(false); mailtoFallback(); });
-      } catch (err) { done(false); mailtoFallback(); }
+      pending = true; clearTimeout(timer);
+      timer = setTimeout(function () { if (!pending) return; reset();
+        toast("If you didn't see a confirmation, please e-mail " + CONTACT_TO); }, 12000);
+    });
+    if (frame) frame.addEventListener("load", function () {
+      if (!pending) return;                                // ignore the initial blank load
+      reset();
+      toast("Message sent — thank you! It will reach Soyli by e-mail.");
+      form.reset();
     });
   }
 
