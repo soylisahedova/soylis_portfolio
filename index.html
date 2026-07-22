@@ -587,6 +587,24 @@ body.ed-on .up-slot{cursor:pointer;outline:1.5px dashed rgba(232,213,163,.4);out
 body.ed-on .up-slot:hover .slot-bar{display:flex;}
 body.ed-on .up-slot.filled .slot-ph{display:none;}
 .up-slot.drop{outline:2px solid #E8D5A3 !important;}
+.up-slot.is-video{cursor:pointer;}
+/* video play badge */
+.slot-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:4;
+  width:66px;height:66px;border-radius:50%;background:rgba(14,14,16,.6);border:2px solid rgba(255,255,255,.85);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(3px);
+  transition:transform .18s ease,background .18s ease;}
+.slot-play svg{width:28px;height:28px;color:#fff;margin-left:3px;}
+.slot-play:hover{background:#E8D5A3;transform:translate(-50%,-50%) scale(1.08);}
+.slot-play:hover svg{color:#16130C;}
+/* fullscreen video player */
+.vid-overlay{position:fixed;inset:0;z-index:2147483600;background:rgba(4,4,6,.94);
+  display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+.vid-el{max-width:94vw;max-height:88vh;width:auto;height:auto;border-radius:10px;
+  box-shadow:0 30px 90px rgba(0,0,0,.7);background:#000;outline:none;}
+.vid-close{position:fixed;top:18px;right:20px;width:46px;height:46px;border-radius:50%;border:0;cursor:pointer;
+  background:rgba(255,255,255,.12);color:#fff;font-size:20px;line-height:1;display:flex;align-items:center;
+  justify-content:center;transition:background .18s ease,transform .18s ease;}
+.vid-close:hover{background:#E8D5A3;color:#16130C;transform:scale(1.06);}
 .ed-shared .up-slot .slot-ph{display:none !important;}
 .ed-shared .up-slot:not(.filled){display:none;}
 
@@ -1620,45 +1638,126 @@ body.ed-on .ed-main{background:#9DB89A;}
   }); }
 
   // ==========================================================================
-  //  UPLOAD SLOTS
+  //  UPLOAD SLOTS  (images AND videos)
   // ==========================================================================
-  function slotImage(slot) { var id = slot.getAttribute("data-slot");
-    if (state.slots[id]) return state.slots[id];
-    if (state.cleared[id]) return null;
-    return slot.getAttribute("data-default") || null; }
+  // Image slot value = data:image string. Video slot value = {v:1, poster,
+  // src?}. The heavy video bytes live as a Blob in IndexedDB (key ::vid::id),
+  // NOT in the JSON state, so saves stay small; `src` is only filled (as a
+  // data URL) when baking a shareable export.
+  var vidBlobs = {}, vidUrls = {};
+  function isVid(v) { return v && typeof v === "object" && v.v; }
+  function blobKey(id) { return KEY + "::vid::" + id; }
+  function idbDelBlob(id) { if (SHARED) return; idb().then(function (db) { try { db.transaction(STORE, "readwrite").objectStore(STORE).delete(blobKey(id)); } catch (e) {} }).catch(function () {}); }
+  function blobToDataUrl(blob) { return new Promise(function (res, rej) { var r = new FileReader(); r.onload = function () { res(r.result); }; r.onerror = rej; r.readAsDataURL(blob); }); }
+
+  function slotVisual(slot) {
+    var id = slot.getAttribute("data-slot"), v = state.slots[id];
+    if (isVid(v)) return { kind: "video", img: v.poster || null };
+    if (typeof v === "string" && v) return { kind: "image", img: v };
+    if (state.cleared[id]) return { kind: "none", img: null };
+    var d = slot.getAttribute("data-default");
+    return d ? { kind: "image", img: d } : { kind: "none", img: null };
+  }
   function renderSlot(slot) {
-    var img = slotImage(slot), ph = slot.querySelector(".slot-ph");
-    if (img) { slot.style.backgroundImage = "url('" + img.replace(/'/g, "%27") + "')"; slot.classList.add("filled"); if (ph) ph.style.display = "none"; }
-    else { slot.style.backgroundImage = ""; slot.classList.remove("filled"); if (ph) ph.style.display = ""; }
+    var vis = slotVisual(slot), ph = slot.querySelector(".slot-ph"), play = slot.querySelector(".slot-play");
+    var isVideo = vis.kind === "video";
+    if (vis.img) slot.style.backgroundImage = "url('" + vis.img.replace(/'/g, "%27") + "')";
+    else slot.style.backgroundImage = "";
+    slot.classList.toggle("filled", !!vis.img || isVideo);
+    slot.classList.toggle("is-video", isVideo);
+    if (ph) ph.style.display = vis.kind === "none" ? "" : "none";
+    if (play) play.style.display = isVideo ? "" : "none";
   }
-  function setSlot(slot, dataUrl) { var id = slot.getAttribute("data-slot");
-    if (dataUrl) { state.slots[id] = dataUrl; delete state.cleared[id]; }
-    else { delete state.slots[id]; state.cleared[id] = 1; }
+  function setSlotImage(slot, u) { var id = slot.getAttribute("data-slot");
+    idbDelBlob(id); if (vidUrls[id]) { try { URL.revokeObjectURL(vidUrls[id]); } catch (e) {} delete vidUrls[id]; } delete vidBlobs[id];
+    state.slots[id] = u; delete state.cleared[id]; save(); renderSlot(slot); }
+  function clearSlot(slot) { var id = slot.getAttribute("data-slot");
+    delete state.slots[id]; state.cleared[id] = 1; idbDelBlob(id);
+    if (vidUrls[id]) { try { URL.revokeObjectURL(vidUrls[id]); } catch (e) {} delete vidUrls[id]; } delete vidBlobs[id];
     save(); renderSlot(slot); }
-  function ingest(slot, file) {
-    if (!file || !/^image\//.test(file.type)) { toast("Please choose an image file."); return; }
-    fileToDataUrl(file).then(function (u) { setSlot(slot, u); }).catch(function () { toast("Could not read that image."); });
+  function setSlotVideo(slot, file) {
+    var id = slot.getAttribute("data-slot");
+    vidBlobs[id] = file; idbSet(blobKey(id), file).catch(function () {});
+    if (vidUrls[id]) { try { URL.revokeObjectURL(vidUrls[id]); } catch (e) {} }
+    vidUrls[id] = URL.createObjectURL(file);
+    makePoster(vidUrls[id]).then(function (poster) {
+      state.slots[id] = { v: 1, poster: poster || null }; delete state.cleared[id]; save(); renderSlot(slot);
+      toast("Video added — click it to play full screen.");
+    });
   }
+  function ingest(slot, file) {
+    if (file && /^video\//.test(file.type)) {
+      if (file.size > 200 * 1024 * 1024) { toast("That video is very large (>200MB) and may not save."); }
+      setSlotVideo(slot, file); return;
+    }
+    if (!file || !/^image\//.test(file.type)) { toast("Choose an image or a video file."); return; }
+    fileToDataUrl(file).then(function (u) { setSlotImage(slot, u); }).catch(function () { toast("Could not read that image."); });
+  }
+  // Grab a poster frame from the start of a video.
+  function makePoster(url) { return new Promise(function (res) {
+    var v = document.createElement("video"); v.muted = true; v.playsInline = true; v.preload = "metadata"; v.src = url;
+    var done = false; function fin(x) { if (done) return; done = true; res(x); }
+    function draw() { try { var w = v.videoWidth, h = v.videoHeight; if (!w || !h) return fin(null);
+      var sc = Math.min(1, 900 / Math.max(w, h)), cw = Math.round(w * sc), ch = Math.round(h * sc);
+      var c = document.createElement("canvas"); c.width = cw; c.height = ch; c.getContext("2d").drawImage(v, 0, 0, cw, ch);
+      fin(c.toDataURL("image/webp", 0.8)); } catch (e) { fin(null); } }
+    v.addEventListener("loadeddata", function () { try { v.currentTime = Math.min(0.1, (v.duration || 1) / 2); } catch (e) { draw(); } });
+    v.addEventListener("seeked", draw);
+    v.addEventListener("error", function () { fin(null); });
+    setTimeout(function () { fin(null); }, 4000);
+  }); }
   function initSlot(slot) {
     var ph = el("div", null); ph.className = "slot-ph";
     ph.innerHTML = '<span class="slot-ph-ic">&#8853;</span><span class="slot-ph-tx"></span>';
-    ph.querySelector(".slot-ph-tx").textContent = slot.getAttribute("data-ph") || "Upload image";
+    ph.querySelector(".slot-ph-tx").textContent = slot.getAttribute("data-ph") || "Upload image or video";
     slot.appendChild(ph);
+    var play = el("div", null); play.className = "slot-play"; play.style.display = "none";
+    play.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+    play.addEventListener("click", function (e) { e.stopPropagation(); openPlayer(slot.getAttribute("data-slot")); });
+    slot.appendChild(play);
     var bar = el("div", null); bar.className = "slot-bar";
     var up = el("button", null, "Upload"); up.type = "button"; up.className = "slot-btn";
     var rm = el("button", null, "Remove"); rm.type = "button"; rm.className = "slot-btn slot-rm";
     bar.appendChild(up); bar.appendChild(rm); slot.appendChild(bar);
-    var input = el("input"); input.type = "file"; input.accept = "image/*"; input.style.display = "none"; slot.appendChild(input);
+    var input = el("input"); input.type = "file"; input.accept = "image/*,video/*"; input.style.display = "none"; slot.appendChild(input);
     function pick() { input.value = ""; input.click(); }
     ph.addEventListener("click", function () { if (editing) pick(); });
     up.addEventListener("click", function (e) { e.stopPropagation(); pick(); });
-    rm.addEventListener("click", function (e) { e.stopPropagation(); setSlot(slot, null); });
+    rm.addEventListener("click", function (e) { e.stopPropagation(); clearSlot(slot); });
     input.addEventListener("change", function () { if (input.files && input.files[0]) ingest(slot, input.files[0]); });
     slot.addEventListener("dragover", function (e) { if (!editing) return; e.preventDefault(); slot.classList.add("drop"); });
     slot.addEventListener("dragleave", function () { slot.classList.remove("drop"); });
     slot.addEventListener("drop", function (e) { if (!editing) return; e.preventDefault(); slot.classList.remove("drop");
       var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]; if (f) ingest(slot, f); });
     renderSlot(slot);
+  }
+  // Resolve video sources after load (blob from IDB, or a baked data URL).
+  function loadVideos() {
+    var slots = document.querySelectorAll(".up-slot");
+    for (var i = 0; i < slots.length; i++) (function (slot) {
+      var id = slot.getAttribute("data-slot"), v = state.slots[id];
+      if (!isVid(v)) return;
+      if (v.src && /^data:video/i.test(v.src)) { vidUrls[id] = v.src; renderSlot(slot); return; }
+      idbGet(blobKey(id)).then(function (blob) { if (blob) { vidBlobs[id] = blob; vidUrls[id] = URL.createObjectURL(blob); } renderSlot(slot); }).catch(function () {});
+    })(slots[i]);
+  }
+  // Fullscreen player: native controls (play/pause/seek) + a close button.
+  function openPlayer(id) {
+    var src = vidUrls[id];
+    if (!src) { toast("This video isn't included in this copy."); return; }
+    var ov = el("div", null); ov.className = "vid-overlay";
+    var v = document.createElement("video"); v.className = "vid-el"; v.src = src;
+    v.controls = true; v.autoplay = true; v.playsInline = true;
+    var close = el("button", null, "✕"); close.className = "vid-close"; close.title = "Close (Esc)";
+    function shut() { try { v.pause(); } catch (e) {} try { if (document.fullscreenElement) document.exitFullscreen(); } catch (e) {}
+      ov.remove(); document.removeEventListener("keydown", onk, true); }
+    function onk(e) { if (e.key === "Escape") { e.stopPropagation(); shut(); } }
+    close.addEventListener("click", shut);
+    ov.addEventListener("click", function (e) { if (e.target === ov) shut(); });
+    ov.appendChild(v); ov.appendChild(close); document.body.appendChild(ov);
+    document.addEventListener("keydown", onk, true);
+    try { if (ov.requestFullscreen) ov.requestFullscreen(); } catch (e) {}
+    var pr = v.play(); if (pr && pr.catch) pr.catch(function () {});
   }
 
   // ==========================================================================
@@ -1936,11 +2035,27 @@ body.ed-on .ed-main{background:#9DB89A;}
   function download(html) { var blob = new Blob([html], { type: "text/html" });
     var a = el("a"); a.href = URL.createObjectURL(blob); a.download = "soyli-portfolio-shareable.html";
     document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 4000); }
+  // Bake state for export. Videos live as Blobs (not in state); embed the ones
+  // small enough to travel as data URLs, and report any skipped as too large.
+  var VIDEO_BAKE_CAP = 40 * 1024 * 1024;
   function buildExport() {
-    var payload = JSON.stringify(state).replace(/<\//g, "<\\/");
-    var inject = "<script>window.__PORTFOLIO_STATE__=" + payload + ";<\/script>";
-    var done = false;
-    return ORIGINAL_HTML.replace(/<head[^>]*>/i, function (m) { if (done) return m; done = true; return m + "\n" + inject; });
+    var st = JSON.parse(JSON.stringify(state));
+    var jobs = [], skipped = [];
+    Object.keys(st.slots || {}).forEach(function (id) {
+      if (!isVid(st.slots[id])) return;
+      if (st.slots[id].src && /^data:video/i.test(st.slots[id].src)) return; // already baked
+      var blob = vidBlobs[id];
+      if (blob && blob.size <= VIDEO_BAKE_CAP) {
+        jobs.push(blobToDataUrl(blob).then(function (u) { st.slots[id].src = u; }));
+      } else if (blob) { skipped.push(id); }
+    });
+    return Promise.all(jobs).then(function () {
+      var payload = JSON.stringify(st).replace(/<\//g, "<\\/");
+      var inject = "<script>window.__PORTFOLIO_STATE__=" + payload + ";<\/script>";
+      var done = false;
+      var html = ORIGINAL_HTML.replace(/<head[^>]*>/i, function (m) { if (done) return m; done = true; return m + "\n" + inject; });
+      return { html: html, skipped: skipped };
+    });
   }
 
   function setEditing(on) {
@@ -1956,8 +2071,10 @@ body.ed-on .ed-main{background:#9DB89A;}
     toggle.onclick = function () { setEditing(!editing); };
     var exp = el("button", null, "↓ Download shareable copy"); exp.className = "ed-exp";
     exp.onclick = function () { var p = exp.textContent; exp.disabled = true; exp.textContent = "Preparing…";
-      try { download(buildExport()); exp.textContent = "Downloaded"; } catch (e) { toast("Export failed: " + (e && e.message || e)); }
-      setTimeout(function () { exp.textContent = p; exp.disabled = false; }, 1600); };
+      buildExport().then(function (r) { download(r.html);
+        exp.textContent = "Downloaded"; if (r.skipped.length) toast("Note: a video was too large to include in the shared file — for sharing, link it instead."); })
+        .catch(function (e) { toast("Export failed: " + (e && e.message || e)); })
+        .then(function () { setTimeout(function () { exp.textContent = p; exp.disabled = false; }, 1600); }); };
     bar.appendChild(toggle); bar.appendChild(exp); document.body.appendChild(bar);
     var hint = el("div"); hint.className = "editor-ui ed-hint";
     hint.innerHTML = "Click <b>Edit page</b>, then click any text to rewrite it (a formatting bar appears at the top for font, size, bold & colour, and <b>＋ Text</b> adds a new block). Click a link to change it; use a slot's Upload/Remove for images. Everything saves here. <b>Download shareable copy</b> makes a file you can send.";
@@ -1979,6 +2096,7 @@ body.ed-on .ed-main{background:#9DB89A;}
   function boot() {
     var slots = document.querySelectorAll(".up-slot");
     for (var i = 0; i < slots.length; i++) initSlot(slots[i]);
+    loadVideos();
     assignText(); applyText(); insertAdded();
     assignLinks(); applyLinks();
     initCarousels(); initReveal(); initAurora(); initContactForm();

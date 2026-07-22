@@ -76,7 +76,14 @@ opening the visitor's e-mail app addressed to you.
 
 ### Notes
 
-- Image slots accept image files (PNG/JPEG/WebP…). For **videos**, upload a
-  poster image and use the link tool to point to the video (YouTube, Drive…).
+- **Videos:** every slot now accepts a **video** too (e.g. the "Video
+  presentation" slot). Upload one and a **play button** appears; clicking it
+  opens the video **full-screen** with **play/pause/seek** controls and a **✕
+  close** button (Esc also closes). Uploaded videos are saved in your browser
+  and come back on reload.
+- **Sharing videos:** a video is embedded in the **Download shareable copy**
+  only if it's reasonably small (≈40 MB). For a long/large intro video, keep it
+  in your master file, and for the shared copy use the link tool to point the
+  button at a hosted version (YouTube, Google Drive…) so the file stays light.
 - The page was rebuilt as a normal static HTML file (fonts and images are
   embedded), so it's easy to open, edit and share anywhere.
