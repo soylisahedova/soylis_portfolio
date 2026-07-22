@@ -701,6 +701,20 @@ body.ed-on .ed-main{background:#9DB89A;}
 #ed-format .add{background:#9DB89A;color:#16130C;border:0;}
 #ed-format .del{background:rgba(120,30,24,.85);color:#fff;border:0;}
 
+/* ---- contact "sent" confirmation ---- */
+.cf-sent{display:flex;flex-direction:column;align-items:flex-start;gap:12px;padding:6px 0;
+  font-family:'IBM Plex Sans',sans-serif;animation:cfIn .45s cubic-bezier(.2,.7,.2,1);}
+.cf-sent-ic{width:58px;height:58px;border-radius:50%;background:rgba(157,184,154,.16);
+  border:1px solid rgba(157,184,154,.55);display:flex;align-items:center;justify-content:center;color:#9DB89A;}
+.cf-sent-ic svg{width:28px;height:28px;}
+.cf-sent-t{font-family:'Wix Madefor Display','IBM Plex Sans',sans-serif;font-weight:700;font-size:25px;color:#F2EEE6;letter-spacing:-.01em;}
+.cf-sent-s{font-size:15px;color:#B8B5AE;line-height:1.6;max-width:420px;}
+.cf-again{margin-top:6px;appearance:none;border:1px solid rgba(255,255,255,.16);background:transparent;
+  color:#E8D5A3;border-radius:100px;padding:11px 22px;font:600 14px/1 'IBM Plex Sans',sans-serif;
+  cursor:pointer;transition:border-color .2s,color .2s,background .2s;}
+.cf-again:hover{border-color:#E8D5A3;background:rgba(232,213,163,.08);}
+@keyframes cfIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+
 /* ---- link panel ---- */
 .ed-overlay{position:fixed;inset:0;z-index:2147483500;background:rgba(6,6,8,.6);
   display:flex;align-items:center;justify-content:center;backdrop-filter:blur(3px);}
@@ -1917,10 +1931,27 @@ body.ed-on .ed-main{background:#9DB89A;}
     });
     if (frame) frame.addEventListener("load", function () {
       if (!pending) return;                                // ignore the initial blank load
-      reset();
-      toast("Message sent — thank you! It will reach Soyli by e-mail.");
-      form.reset();
+      reset(); form.reset();
+      showSent(form);
     });
+  }
+  // Replace the form with a friendly confirmation panel after sending.
+  function showSent(form) {
+    var panel = form.__sent;
+    if (!panel) {
+      panel = el("div"); panel.className = "cf-sent";
+      panel.innerHTML =
+        '<div class="cf-sent-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>' +
+        '<div class="cf-sent-t">Thanks — message sent!</div>' +
+        '<div class="cf-sent-s">I’ll get back to you as soon as I can.</div>' +
+        '<button type="button" class="cf-again">Send another message</button>';
+      form.parentNode.insertBefore(panel, form.nextSibling);
+      form.__sent = panel;
+      panel.querySelector(".cf-again").addEventListener("click", function () {
+        panel.style.display = "none"; form.style.display = "";
+      });
+    }
+    form.style.display = "none"; panel.style.display = "";
   }
 
   // ==========================================================================
