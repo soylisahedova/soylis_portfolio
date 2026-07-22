@@ -669,6 +669,8 @@ body.ed-on .ed-added::before{content:"added";position:absolute;left:-4px;top:-14
   font:600 12.5px/1 'IBM Plex Sans',sans-serif;box-shadow:0 4px 16px rgba(0,0,0,.4);display:inline-flex;align-items:center;gap:7px;}
 .ed-exp:hover{background:#241d10;}
 .ed-exp:disabled{opacity:.7;cursor:default;}
+.ed-exp2{background:#1c2418;color:#9DB89A;border-color:rgba(157,184,154,.4);}
+.ed-exp2:hover{background:#26301f;}
 body.ed-on .ed-main{background:#9DB89A;}
 .ed-hint{position:fixed;left:16px;bottom:16px;max-width:340px;z-index:2147483000;color:#F2EEE6;
   background:rgba(20,18,14,.94);border:1px solid rgba(232,213,163,.25);padding:13px 16px;
@@ -1609,7 +1611,8 @@ body.ed-on .ed-main{background:#9DB89A;}
 
   var EMB = (window.__PORTFOLIO_STATE__ && typeof window.__PORTFOLIO_STATE__ === "object")
     ? window.__PORTFOLIO_STATE__ : null;
-  var SHARED = !!EMB;
+  var FORCE_EDIT = !!window.__PORTFOLIO_EDITABLE__;   // set only in "editable master" exports
+  var SHARED = !!EMB && !FORCE_EDIT;                  // read-only only for the published copy
   var KEY = "soyli-portfolio::" + (location.pathname || "p");
   var DBN = "soyli-portfolio", STORE = "kv";
 
@@ -1636,11 +1639,14 @@ body.ed-on .ed-main{background:#9DB89A;}
     style: o.style || {}, links: o.links || {}, added: o.added || [] }; }
   function loadState() {
     if (SHARED) { state = normalize(EMB); return Promise.resolve(); }
+    function fromLS() { try { var ls = localStorage.getItem(KEY); if (ls) { state = normalize(JSON.parse(ls)); return true; } } catch (e) {} return false; }
     return idbGet(KEY).then(function (v) {
       if (typeof v === "string") { state = normalize(JSON.parse(v)); return; }
-      try { var ls = localStorage.getItem(KEY); if (ls) state = normalize(JSON.parse(ls)); } catch (e) {}
+      if (fromLS()) return;
+      if (EMB) state = normalize(EMB);          // editable-master seed on a fresh browser
     }).catch(function () {
-      try { var ls = localStorage.getItem(KEY); if (ls) state = normalize(JSON.parse(ls)); } catch (e) {}
+      if (fromLS()) return;
+      if (EMB) state = normalize(EMB);
     });
   }
   var saveT = null;
@@ -2074,13 +2080,15 @@ body.ed-on .ed-main{background:#9DB89A;}
   }
 
   // ---- export ----
-  function download(html) { var blob = new Blob([html], { type: "text/html" });
-    var a = el("a"); a.href = URL.createObjectURL(blob); a.download = "soyli-portfolio-shareable.html";
+  function download(html, name) { var blob = new Blob([html], { type: "text/html" });
+    var a = el("a"); a.href = URL.createObjectURL(blob); a.download = name || "soyli-portfolio.html";
     document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 4000); }
   // Bake state for export. Videos live as Blobs (not in state); embed the ones
   // small enough to travel as data URLs, and report any skipped as too large.
+  // editable=true also injects a flag so the copy opens still-editable (a
+  // "master" you keep and re-edit); editable=false is the read-only publish copy.
   var VIDEO_BAKE_CAP = 40 * 1024 * 1024;
-  function buildExport() {
+  function buildExport(editable) {
     var st = JSON.parse(JSON.stringify(state));
     var jobs = [], skipped = [];
     Object.keys(st.slots || {}).forEach(function (id) {
@@ -2093,7 +2101,8 @@ body.ed-on .ed-main{background:#9DB89A;}
     });
     return Promise.all(jobs).then(function () {
       var payload = JSON.stringify(st).replace(/<\//g, "<\\/");
-      var inject = "<script>window.__PORTFOLIO_STATE__=" + payload + ";<\/script>";
+      var inject = "<script>window.__PORTFOLIO_STATE__=" + payload + ";" +
+        (editable ? "window.__PORTFOLIO_EDITABLE__=true;" : "") + "<\/script>";
       var done = false;
       var html = ORIGINAL_HTML.replace(/<head[^>]*>/i, function (m) { if (done) return m; done = true; return m + "\n" + inject; });
       return { html: html, skipped: skipped };
@@ -2111,15 +2120,21 @@ body.ed-on .ed-main{background:#9DB89A;}
     var bar = el("div"); bar.className = "editor-ui"; bar.id = "ed-bar";
     var toggle = el("button", null, "✎ Edit page"); toggle.id = "ed-toggle"; toggle.className = "ed-main";
     toggle.onclick = function () { setEditing(!editing); };
-    var exp = el("button", null, "↓ Download shareable copy"); exp.className = "ed-exp";
-    exp.onclick = function () { var p = exp.textContent; exp.disabled = true; exp.textContent = "Preparing…";
-      buildExport().then(function (r) { download(r.html);
-        exp.textContent = "Downloaded"; if (r.skipped.length) toast("Note: a video was too large to include in the shared file — for sharing, link it instead."); })
-        .catch(function (e) { toast("Export failed: " + (e && e.message || e)); })
-        .then(function () { setTimeout(function () { exp.textContent = p; exp.disabled = false; }, 1600); }); };
-    bar.appendChild(toggle); bar.appendChild(exp); document.body.appendChild(bar);
+    function mkExport(btn, editable, name, okMsg) {
+      btn.onclick = function () { var p = btn.textContent; btn.disabled = true; btn.textContent = "Preparing…";
+        buildExport(editable).then(function (r) { download(r.html, name);
+          btn.textContent = "Downloaded ✓"; toast(okMsg);
+          if (r.skipped.length) toast("A video was too large to embed — for sharing, link it instead."); })
+          .catch(function (e) { toast("Export failed: " + (e && e.message || e)); })
+          .then(function () { setTimeout(function () { btn.textContent = p; btn.disabled = false; }, 1800); }); };
+    }
+    var pub = el("button", null, "↓ Download final version (to publish)"); pub.className = "ed-exp";
+    mkExport(pub, false, "index.html", "Final version downloaded — upload this to your site as index.html.");
+    var mast = el("button", null, "✎ Download editable master (keep this)"); mast.className = "ed-exp ed-exp2";
+    mkExport(mast, true, "soyli-portfolio-editable-master.html", "Editable master downloaded — keep it safe; open it anytime to edit again.");
+    bar.appendChild(toggle); bar.appendChild(pub); bar.appendChild(mast); document.body.appendChild(bar);
     var hint = el("div"); hint.className = "editor-ui ed-hint";
-    hint.innerHTML = "Click <b>Edit page</b>, then click any text to rewrite it (a formatting bar appears at the top for font, size, bold & colour, and <b>＋ Text</b> adds a new block). Click a link to change it; use a slot's Upload/Remove for images. Everything saves here. <b>Download shareable copy</b> makes a file you can send.";
+    hint.innerHTML = "Click <b>Edit page</b> to change any text (a bar appears for font, size, bold &amp; colour; <b>＋ Text</b> adds a block), links, and images. When you're happy: <b>Download editable master</b> = your source to keep &amp; re-edit; <b>Download final version</b> = the read-only file you upload to publish.";
     document.body.appendChild(hint);
     setTimeout(function () { hint.style.opacity = "0"; }, 14000); setTimeout(function () { hint.remove(); }, 14800);
   }
