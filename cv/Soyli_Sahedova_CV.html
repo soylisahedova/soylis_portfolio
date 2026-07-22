@@ -20,11 +20,30 @@
     width:210mm; min-height:297mm; margin:0 auto; padding:16mm 16mm 14mm;
     position:relative; overflow:hidden;
     background:
-      radial-gradient(60mm 60mm at 88% 2%, rgba(180,137,44,.16), transparent 70%),
-      radial-gradient(70mm 70mm at 2% 30%, rgba(95,122,91,.14), transparent 70%),
-      radial-gradient(80mm 80mm at 100% 100%, rgba(180,137,44,.13), transparent 72%),
-      linear-gradient(135deg,var(--paper1),var(--paper2) 55%,var(--paper3));
+      radial-gradient(55mm 55mm at 92% -2%, rgba(180,137,44,.20), transparent 68%),
+      radial-gradient(60mm 60mm at 4% 22%, rgba(95,122,91,.16), transparent 70%),
+      radial-gradient(85mm 85mm at 102% 102%, rgba(180,137,44,.15), transparent 72%),
+      radial-gradient(60mm 60mm at 30% 108%, rgba(95,122,91,.12), transparent 70%),
+      linear-gradient(135deg,var(--paper1),var(--paper2) 52%,var(--paper3));
+    background-size:100% 100%,100% 100%,100% 100%,100% 100%,180% 180%;
+    animation:cvShift 24s ease-in-out infinite alternate;
   }
+  @keyframes cvShift{from{background-position:0 0,0 0,0 0,0 0,0% 0%;}
+    to{background-position:0 0,0 0,0 0,0 0,100% 100%;}}
+  /* soft floating colour blobs (static in PDF, animated on screen) */
+  .bgfx{position:absolute; inset:0; z-index:0; pointer-events:none; overflow:hidden;}
+  .blob{position:absolute; border-radius:50%; filter:blur(34px); opacity:.5; will-change:transform;}
+  .blob.b1{width:70mm;height:70mm;top:-22mm;right:-14mm;
+    background:radial-gradient(circle,rgba(196,162,74,.55),transparent 66%);animation:cvA 26s ease-in-out infinite alternate;}
+  .blob.b2{width:64mm;height:64mm;bottom:24mm;left:-20mm;
+    background:radial-gradient(circle,rgba(120,150,116,.5),transparent 66%);animation:cvB 30s ease-in-out infinite alternate;}
+  .blob.b3{width:58mm;height:58mm;bottom:-24mm;right:14mm;
+    background:radial-gradient(circle,rgba(196,162,74,.42),transparent 68%);animation:cvC 34s ease-in-out infinite alternate;}
+  @keyframes cvA{from{transform:translate(0,0);}to{transform:translate(-10mm,10mm) scale(1.12);}}
+  @keyframes cvB{from{transform:translate(0,0) scale(1.08);}to{transform:translate(12mm,-8mm) scale(1);}}
+  @keyframes cvC{from{transform:translate(0,0);}to{transform:translate(-8mm,-10mm) scale(1.15);}}
+  .page > header, .page > section, .page > .foot{position:relative; z-index:1;}
+  @media(prefers-reduced-motion:reduce){.page,.blob{animation:none;}}
   a{color:var(--gold); text-decoration:none;}
 
   /* header */
@@ -76,6 +95,7 @@
 </head>
 <body>
 <div class="page">
+  <div class="bgfx" aria-hidden="true"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span></div>
 
   <header>
     <div class="name">SOYLI SAHEDOVA<span class="dot">.</span></div>
