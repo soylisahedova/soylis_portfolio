@@ -2274,7 +2274,9 @@ body.ed-on .ed-main{background:#9DB89A;}
     }
     var pub = el("button", null, "↓ Download final version (to publish)"); pub.className = "ed-exp";
     mkExport(pub, false, "index.html", "Final version downloaded — upload this to your site as index.html.");
-    bar.appendChild(toggle); bar.appendChild(pub); document.body.appendChild(bar);
+    var gh = el("button", null, "⚙ Connect GitHub (⌘S)"); gh.className = "ed-exp";
+    gh.onclick = function () { openGitHubPanel(); };
+    bar.appendChild(toggle); bar.appendChild(pub); bar.appendChild(gh); document.body.appendChild(bar);
     var hint = el("div"); hint.className = "editor-ui ed-hint";
     hint.innerHTML = "Click <b>Edit page</b> to edit any text, links and images. Add or remove skills with the <b>×</b> / <b>＋ Skill</b> chips. Press <b>⌘S</b> (Ctrl+S) to save straight to GitHub. <b>Download final version</b> = a read-only copy to publish.";
     document.body.appendChild(hint);
