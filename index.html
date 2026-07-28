@@ -2249,7 +2249,9 @@ body.ed-on .ed-main{background:#9DB89A;}
       var html = ORIGINAL_HTML
         // Remove any state block injected by a PREVIOUS save, so blocks don't
         // pile up (an older one would otherwise execute last and win on reload).
-        .replace(/<script[^>]*>\s*window\.__PORTFOLIO_STATE__[\s\S]*?<\/script>\s*/gi, "")
+        // Match only the real block (value starts with "={"), NOT the identical
+        // string literal inside this script (which is `="` + payload).
+        .replace(/<script[^>]*>window\.__PORTFOLIO_STATE__=\{[\s\S]*?<\/script>\s*/gi, "")
         .replace(/<head[^>]*>/i, function (m) { if (done) return m; done = true; return m + "\n" + inject; });
       return { html: html, skipped: skipped };
     });
