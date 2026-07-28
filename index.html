@@ -2411,9 +2411,19 @@ body.ed-on .ed-main{background:#9DB89A;}
             });
           });
         });
-      }).then(function () { toast("Saved to GitHub ✓ — your live site updates in a minute."); })
-        .catch(function (err) { toast("GitHub save failed: " + (err && err.message || err)); });
-    }).catch(function (err) { toast("Could not prepare the page: " + (err && err.message || err)); });
+      }).then(function () { ghModal("Saved to GitHub ✓", "Your edits were committed to <b>" + escHtml(cfg.owner + "/" + cfg.repo) + "</b> on branch <b>" + escHtml(cfg.branch) + "</b>. Your live site updates in about a minute — <b>hard-refresh</b> (Ctrl/Cmd+Shift+R) to see it."); })
+        .catch(function (err) { ghModal("GitHub save failed", "The save did NOT go through. Error:<br><b>" + escHtml(err && err.message || String(err)) + "</b><br><br>Check that the branch name is exactly right and that your token has <b>Contents: Read and write</b> on this repo."); });
+    }).catch(function (err) { ghModal("Couldn't prepare the page", escHtml(err && err.message || String(err))); });
+  }
+  function escHtml(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+  function ghModal(title, bodyHtml) {
+    var ov = el("div", null); ov.className = "ed-overlay";
+    var box = el("div", null); box.className = "ed-panel";
+    box.innerHTML = '<div class="ed-panel-t">' + title + '</div><p class="ed-panel-s">' + bodyHtml + '</p>' +
+      '<div class="ed-panel-row"><span style="flex:1"></span><button class="ed-b ed-save" type="button">OK</button></div>';
+    ov.appendChild(box); document.body.appendChild(ov);
+    box.querySelector(".ed-save").onclick = function () { ov.remove(); };
+    ov.addEventListener("click", function (e) { if (e.target === ov) ov.remove(); });
   }
 
   function boot() {
