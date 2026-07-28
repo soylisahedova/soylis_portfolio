@@ -2398,8 +2398,18 @@ body.ed-on .ed-main{background:#9DB89A;}
       var H = ghHeaders(cfg.token);
       var refGetUrl = base + "ref/heads/" + cfg.branch;     // singular: exact ref
       var refPatchUrl = base + "refs/heads/" + cfg.branch;  // plural: update ref
-      function jf(url, opts) { return fetch(url, opts).then(function (res) {
-        return res.json().then(function (j) { if (!res.ok) throw new Error((j && j.message) || ("HTTP " + res.status)); return j; }); }); }
+      function withTimeout(p, ms) { return Promise.race([p, new Promise(function (_, rej) {
+        setTimeout(function () { rej(new Error("Timed out after " + (ms / 1000) + "s — GitHub didn't respond. Likely a network, proxy, or CORS block, or the token/branch is wrong.")); }, ms); })]); }
+      function jf(url, opts) {
+        return withTimeout(fetch(url, opts), 25000).then(function (res) {
+          return res.text().then(function (txt) {
+            var j; try { j = txt ? JSON.parse(txt) : {}; } catch (e) { j = { message: (txt || "").slice(0, 300) }; }
+            if (!res.ok) { console.error("[save] " + (opts && opts.method || "GET") + " " + url + " -> " + res.status, j);
+              throw new Error("HTTP " + res.status + (j && j.message ? " · " + j.message : "")); }
+            return j;
+          });
+        }).catch(function (e) { console.error("[save] request failed:", url, e); throw e; });
+      }
       jf(refGetUrl, { headers: H }).then(function (ref) {
         var commitSha = ref.object.sha;
         return jf(base + "commits/" + commitSha, { headers: H }).then(function (commit) {
