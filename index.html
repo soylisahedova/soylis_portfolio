@@ -2246,7 +2246,11 @@ body.ed-on .ed-main{background:#9DB89A;}
       var inject = "<script>window.__PORTFOLIO_STATE__=" + payload + ";" +
         (editable ? "window.__PORTFOLIO_EDITABLE__=true;" : "") + "<\/script>";
       var done = false;
-      var html = ORIGINAL_HTML.replace(/<head[^>]*>/i, function (m) { if (done) return m; done = true; return m + "\n" + inject; });
+      var html = ORIGINAL_HTML
+        // Remove any state block injected by a PREVIOUS save, so blocks don't
+        // pile up (an older one would otherwise execute last and win on reload).
+        .replace(/<script[^>]*>\s*window\.__PORTFOLIO_STATE__[\s\S]*?<\/script>\s*/gi, "")
+        .replace(/<head[^>]*>/i, function (m) { if (done) return m; done = true; return m + "\n" + inject; });
       return { html: html, skipped: skipped };
     });
   }
