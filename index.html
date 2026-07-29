@@ -2412,15 +2412,15 @@ body:not(.ed-on) .skill-chip:hover{transform:translateY(-2px);}
       var refPatchUrl = base + "refs/heads/" + cfg.branch;  // plural: update ref
       function withTimeout(p, ms) { return Promise.race([p, new Promise(function (_, rej) {
         setTimeout(function () { rej(new Error("Timed out after " + (ms / 1000) + "s — GitHub didn't respond. Likely a network, proxy, or CORS block, or the token/branch is wrong.")); }, ms); })]); }
-      function jf(url, opts) {
+      function jf(url, opts, tries) { tries = tries || 0;
         return withTimeout(fetch(url, opts), 120000).then(function (res) {
           return res.text().then(function (txt) {
             var j; try { j = txt ? JSON.parse(txt) : {}; } catch (e) { j = { message: (txt || "").slice(0, 300) }; }
-            if (!res.ok) { console.error("[save] " + (opts && opts.method || "GET") + " " + url + " -> " + res.status, j);
+            if (!res.ok) { if (res.status >= 500 && tries < 2) return jf(url, opts, tries + 1); console.error("[save] " + (opts && opts.method || "GET") + " " + url + " -> " + res.status, j);
               throw new Error("HTTP " + res.status + (j && j.message ? " · " + j.message : "")); }
             return j;
           });
-        }).catch(function (e) { console.error("[save] request failed:", url, e); throw e; });
+        }).catch(function (e) { if (tries < 2 && /Timed out|Failed to fetch|NetworkError|load failed/i.test(e.message || "")) { console.warn("[save] retrying after:", e.message); return jf(url, opts, tries + 1); } console.error("[save] request failed:", url, e); throw e; });
       }
       jf(refGetUrl, { headers: H }).then(function (ref) {
         var commitSha = ref.object.sha;
