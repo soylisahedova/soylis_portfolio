@@ -776,6 +776,11 @@ body.ed-on .ed-main{background:#9DB89A;}
 .skill-chip{transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease;}
 .skill-chip:hover{border-color:rgba(232,213,163,.6) !important; box-shadow:0 6px 18px rgba(232,213,163,.12);}
 body:not(.ed-on) .skill-chip:hover{transform:translateY(-2px);}
+
+.up-slot .slot-bar{flex-wrap:wrap; max-width:calc(100% - 16px); justify-content:flex-end;}
+.slot-zoom{min-width:24px; padding:6px 8px; text-align:center;}
+body.ed-on .up-slot.filled:not(.is-video){cursor:grab;}
+.up-slot.panning{cursor:grabbing !important;}
 </style>
 </head>
 <body>
@@ -1668,7 +1673,7 @@ body:not(.ed-on) .skill-chip:hover{transform:translateY(-2px);}
   var DBN = "soyli-portfolio", STORE = "kv";
 
   // state: text/style keyed by eid (authored) or aid (added); added = new blocks
-  var state = { slots: {}, cleared: {}, text: {}, style: {}, links: {}, added: [], hidden: {}, lists: {} };
+  var state = { slots: {}, cleared: {}, text: {}, style: {}, links: {}, added: [], hidden: {}, lists: {}, imgfit: {} };
   var editing = false;
 
   // ---- storage --------------------------------------------------------------
@@ -1687,7 +1692,7 @@ body:not(.ed-on) .skill-chip:hover{transform:translateY(-2px);}
   }); }); }
   function normalize(o) { o = o || {}; return {
     slots: o.slots || {}, cleared: o.cleared || {}, text: o.text || {},
-    style: o.style || {}, links: o.links || {}, added: o.added || [], hidden: o.hidden || {}, lists: o.lists || {} }; }
+    style: o.style || {}, links: o.links || {}, added: o.added || [], hidden: o.hidden || {}, lists: o.lists || {}, imgfit: o.imgfit || {} }; }
   function loadState() {
     if (SHARED) { state = normalize(EMB); return Promise.resolve(); }
     function fromLS() { try { var ls = localStorage.getItem(KEY); if (ls) { state = normalize(JSON.parse(ls)); return true; } } catch (e) {} return false; }
@@ -1770,6 +1775,7 @@ body:not(.ed-on) .skill-chip:hover{transform:translateY(-2px);}
     return d ? { kind: "image", img: d } : { kind: "none", img: null };
   }
   function renderSlot(slot) {
+    var id = slot.getAttribute("data-slot");
     var vis = slotVisual(slot);
     var ph = slot.querySelector(".slot-ph"), play = slot.querySelector(".slot-play");
     var img = slot.querySelector(".slot-img"), frame = slot.querySelector(".slot-embed");
@@ -1797,7 +1803,12 @@ body:not(.ed-on) .skill-chip:hover{transform:translateY(-2px);}
     }
     if (img) img.style.display = "none";
     if (vis.img) { slot.style.backgroundImage = "url('" + vis.img.replace(/'/g, "%27") + "')";
-      slot.style.backgroundSize = slot.getAttribute("data-fit") || "cover"; }
+      slot.style.backgroundRepeat = "no-repeat";
+      var _f = state.imgfit[id] || {};
+      var _m = _f.mode || slot.getAttribute("data-fit") || "cover";
+      if (_m === "contain") { slot.style.backgroundSize = "contain"; slot.style.backgroundPosition = "center"; }
+      else { var _z = _f.zoom || 1; slot.style.backgroundSize = (_z > 1 ? (_z * 100) + "%" : "cover");
+        slot.style.backgroundPosition = (_f.x == null ? 50 : _f.x) + "% " + (_f.y == null ? 50 : _f.y) + "%"; } }
     else slot.style.backgroundImage = "";
   }
   function setSlotImage(slot, u) { var id = slot.getAttribute("data-slot");
@@ -1834,6 +1845,37 @@ body:not(.ed-on) .skill-chip:hover{transform:translateY(-2px);}
     var up = el("button", null, vlink ? "Set link" : "Upload"); up.type = "button"; up.className = "slot-btn";
     var rm = el("button", null, "Remove"); rm.type = "button"; rm.className = "slot-btn slot-rm";
     bar.appendChild(up); bar.appendChild(rm); slot.appendChild(bar);
+    if (!vlink && slot.getAttribute("data-mode") !== "natural") {
+      var fitBtn = el("button", null, "Fill"); fitBtn.type = "button"; fitBtn.className = "slot-btn slot-fitbtn"; fitBtn.title = "Fill the frame / Fit the whole image";
+      var zout = el("button", null, "\u2212"); zout.type = "button"; zout.className = "slot-btn slot-zoom"; zout.title = "Zoom out";
+      var zin = el("button", null, "+"); zin.type = "button"; zin.className = "slot-btn slot-zoom"; zin.title = "Zoom in";
+      bar.appendChild(fitBtn); bar.appendChild(zout); bar.appendChild(zin);
+      var sid = slot.getAttribute("data-slot");
+      var getFit = function () { var f = state.imgfit[sid]; return f ? f : { mode: slot.getAttribute("data-fit") || "cover", zoom: 1, x: 50, y: 50 }; };
+      var syncFitUI = function () { var f = getFit(); var cover = (f.mode || "cover") !== "contain"; fitBtn.textContent = cover ? "Fill" : "Fit"; zin.style.display = zout.style.display = cover ? "" : "none"; };
+      var commitFit = function (f) { state.imgfit[sid] = f; save(); renderSlot(slot); syncFitUI(); };
+      fitBtn.addEventListener("click", function (e) { e.stopPropagation(); var f = getFit(); f.mode = ((f.mode || "cover") === "contain") ? "cover" : "contain"; if (f.mode === "cover" && !f.zoom) f.zoom = 1; commitFit(f); });
+      zin.addEventListener("click", function (e) { e.stopPropagation(); var f = getFit(); f.mode = "cover"; f.zoom = Math.min(4, Math.round(((f.zoom || 1) + 0.2) * 100) / 100); commitFit(f); });
+      zout.addEventListener("click", function (e) { e.stopPropagation(); var f = getFit(); f.mode = "cover"; f.zoom = Math.max(1, Math.round(((f.zoom || 1) - 0.2) * 100) / 100); commitFit(f); });
+      var panning = false, psx = 0, psy = 0, pfx = 50, pfy = 50;
+      slot.addEventListener("pointerdown", function (e) {
+        if (!editing) return;
+        if (e.target.closest(".slot-bar,.slot-play,.slot-embed")) return;
+        if (!slot.classList.contains("filled") || slot.classList.contains("is-video")) return;
+        var f = getFit(); if ((f.mode || "cover") === "contain") return;
+        panning = true; psx = e.clientX; psy = e.clientY; pfx = (f.x == null ? 50 : f.x); pfy = (f.y == null ? 50 : f.y);
+        try { slot.setPointerCapture(e.pointerId); } catch (er) {} slot.classList.add("panning"); e.preventDefault();
+      });
+      slot.addEventListener("pointermove", function (e) {
+        if (!panning) return; var f = getFit(); f.mode = "cover";
+        f.x = Math.max(0, Math.min(100, pfx - (e.clientX - psx) / Math.max(1, slot.clientWidth) * 100));
+        f.y = Math.max(0, Math.min(100, pfy - (e.clientY - psy) / Math.max(1, slot.clientHeight) * 100));
+        state.imgfit[sid] = f; renderSlot(slot);
+      });
+      var endPan = function () { if (panning) { panning = false; slot.classList.remove("panning"); save(); } };
+      slot.addEventListener("pointerup", endPan); slot.addEventListener("pointercancel", endPan);
+      syncFitUI();
+    }
     var input = el("input"); input.type = "file"; input.accept = "image/*"; input.style.display = "none"; slot.appendChild(input);
     function act() { if (vlink) openVideoLinkPanel(slot); else { input.value = ""; input.click(); } }
     ph.addEventListener("click", function () { if (editing) act(); });
