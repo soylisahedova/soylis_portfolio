@@ -767,6 +767,16 @@ body.ed-on .ed-main{background:#9DB89A;}
 .ed-save:hover{background:#F4E9C8;}
 
 </style>
+<style id="soyli-fix">
+/* About-me text spans the whole card (override any saved max-width) */
+#story p{max-width:none !important;}
+/* More attractive "What I do" chips */
+[data-skilllist]{gap:12px !important;}
+.skill-chip::before{content:""; display:inline-block; width:5px; height:5px; border-radius:50%; background:#9DB89A; margin-right:9px; flex:none;}
+.skill-chip{transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease;}
+.skill-chip:hover{border-color:rgba(232,213,163,.6) !important; box-shadow:0 6px 18px rgba(232,213,163,.12);}
+body:not(.ed-on) .skill-chip:hover{transform:translateY(-2px);}
+</style>
 </head>
 <body>
 
@@ -1609,7 +1619,7 @@ body.ed-on .ed-main{background:#9DB89A;}
         </div>
         <div>
           <div style="font-size:11px; letter-spacing:.22em; text-transform:uppercase; color:#8C8A85; margin-bottom:8px;">WhatsApp</div>
-          <a href="https://wa.me/9936821118" target="_blank" style="font-weight:600; color:#F2EEE6; font-size:16px;" class="x62">+993 68 21 11 8</a>
+          <a href="https://wa.me/99365821118" target="_blank" style="font-weight:600; color:#F2EEE6; font-size:16px;" class="x62">+99365821118</a>
         </div>
         <div>
           <div style="font-size:11px; letter-spacing:.22em; text-transform:uppercase; color:#8C8A85; margin-bottom:8px;">Telegram</div>
@@ -2299,7 +2309,7 @@ body.ed-on .ed-main{background:#9DB89A;}
   // ==========================================================================
   //  EDITABLE SKILL LISTS  (add / remove chips)
   // ==========================================================================
-  var CHIP_STYLE = "font-size:13px; color:#E8D5A3; border:1px solid rgba(232,213,163,.35); padding:8px 15px; border-radius:100px; display:inline-flex; align-items:center; line-height:1.1;";
+  var CHIP_STYLE = "font-size:13.5px; font-weight:500; color:#F2E7C6; background:linear-gradient(135deg, rgba(232,213,163,.16), rgba(157,184,154,.07)); border:1px solid rgba(232,213,163,.34); padding:9px 17px; border-radius:100px; display:inline-flex; align-items:center; line-height:1.1;";
   var skillLists = [];
   function injectSkillCss() {
     var css =
