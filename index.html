@@ -1755,8 +1755,9 @@ body.ed-on .up-slot.filled:not(.is-video){cursor:grab;}
       var m;
       m = u.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/|live\/)|youtu\.be\/)([\w-]{6,})/);
       if (m) return "https://www.youtube.com/embed/" + m[1];
-      m = u.match(/vimeo\.com\/(?:video\/)?(\d+)/);
-      if (m) return "https://player.vimeo.com/video/" + m[1];
+      m = u.match(/vimeo\.com\/(?:video\/|manage\/videos\/)?(\d+)(?:\/([A-Za-z0-9]+))?/);
+      if (m) { var vh = m[2] || (u.match(/[?&]h=([A-Za-z0-9]+)/) || [])[1];
+        return "https://player.vimeo.com/video/" + m[1] + (vh ? "?h=" + vh : ""); }
       m = u.match(/drive\.google\.com\/file\/d\/([\w-]+)/);
       if (m) return "https://drive.google.com/file/d/" + m[1] + "/preview";
       m = u.match(/drive\.google\.com\/open\?id=([\w-]+)/);
