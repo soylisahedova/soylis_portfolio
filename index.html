@@ -2403,7 +2403,7 @@ body:not(.ed-on) .skill-chip:hover{transform:translateY(-2px);}
     pushToGitHub(cfg);
   }
   function pushToGitHub(cfg) {
-    toast("Saving to GitHub…");
+    toast("Saving to GitHub… large pages can take up to a minute, please wait.");
     buildExport(true).then(function (r) {
       var content = b64unicode(r.html);
       var base = "https://api.github.com/repos/" + cfg.owner + "/" + cfg.repo + "/git/";
@@ -2413,7 +2413,7 @@ body:not(.ed-on) .skill-chip:hover{transform:translateY(-2px);}
       function withTimeout(p, ms) { return Promise.race([p, new Promise(function (_, rej) {
         setTimeout(function () { rej(new Error("Timed out after " + (ms / 1000) + "s — GitHub didn't respond. Likely a network, proxy, or CORS block, or the token/branch is wrong.")); }, ms); })]); }
       function jf(url, opts) {
-        return withTimeout(fetch(url, opts), 25000).then(function (res) {
+        return withTimeout(fetch(url, opts), 120000).then(function (res) {
           return res.text().then(function (txt) {
             var j; try { j = txt ? JSON.parse(txt) : {}; } catch (e) { j = { message: (txt || "").slice(0, 300) }; }
             if (!res.ok) { console.error("[save] " + (opts && opts.method || "GET") + " " + url + " -> " + res.status, j);
