@@ -1730,14 +1730,14 @@ body.ed-on .post-add{display:inline-flex;}
   function keyOf(e) { return e.getAttribute("data-eid") || e.getAttribute("data-aid"); }
 
   // ---- image downscale ------------------------------------------------------
-  var MAXD = 1500;
+  var MAXD = 1200;
   function fileToDataUrl(file) {
     return createImageBitmap(file).then(function (bm) { try {
       var sc = Math.min(1, MAXD / Math.max(bm.width, bm.height));
       var w = Math.max(1, Math.round(bm.width * sc)), h = Math.max(1, Math.round(bm.height * sc));
       var c = document.createElement("canvas"); c.width = w; c.height = h;
       c.getContext("2d").drawImage(bm, 0, 0, w, h);
-      return c.toDataURL("image/webp", 0.85);
+      return c.toDataURL("image/webp", 0.8);
     } finally { bm.close && bm.close(); } });
   }
   function fileToDataUrl0(file) { return new Promise(function (res, rej) {
@@ -2292,6 +2292,20 @@ body.ed-on .post-add{display:inline-flex;}
   // editable=true also injects a flag so the copy opens still-editable (a
   // "master" you keep and re-edit); editable=false is the read-only publish copy.
   var VIDEO_BAKE_CAP = 40 * 1024 * 1024;
+  var IMG_OPT_MIN = 130 * 1024;      // only re-encode data-URLs longer than ~130KB
+  var _optCache = {};
+  function optimizeImg(u) {
+    if (_optCache[u] !== undefined) return Promise.resolve(_optCache[u]);
+    return fetch(u).then(function (r) { return r.blob(); }).then(function (b) { return createImageBitmap(b); })
+      .then(function (bm) {
+        var sc = Math.min(1, 1200 / Math.max(bm.width, bm.height));
+        var w = Math.max(1, Math.round(bm.width * sc)), h = Math.max(1, Math.round(bm.height * sc));
+        var c = document.createElement("canvas"); c.width = w; c.height = h;
+        c.getContext("2d").drawImage(bm, 0, 0, w, h); if (bm.close) bm.close();
+        var out = c.toDataURL("image/webp", 0.8); if (out.length >= u.length) out = u;
+        _optCache[u] = out; return out;
+      }).catch(function () { _optCache[u] = u; return u; });
+  }
   function buildExport(editable) {
     var st = JSON.parse(JSON.stringify(state));
     var jobs = [], skipped = [];
@@ -2302,6 +2316,12 @@ body.ed-on .post-add{display:inline-flex;}
       if (blob && blob.size <= VIDEO_BAKE_CAP) {
         jobs.push(blobToDataUrl(blob).then(function (u) { st.slots[id].src = u; }));
       } else if (blob) { skipped.push(id); }
+    });
+    Object.keys(st.slots || {}).forEach(function (id) {
+      var v = st.slots[id];
+      if (typeof v === "string" && v.indexOf("data:image/") === 0 && v.length > IMG_OPT_MIN) {
+        jobs.push(optimizeImg(v).then(function (u) { st.slots[id] = u; }));
+      }
     });
     return Promise.all(jobs).then(function () {
       var payload = JSON.stringify(st).replace(/<\//g, "<\\/");
