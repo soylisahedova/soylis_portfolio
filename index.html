@@ -783,6 +783,12 @@ body.ed-on .up-slot.filled:not(.is-video){cursor:grab;}
 .up-slot.panning{cursor:grabbing !important;}
 
 .gsr-hide-motion2{display:none !important;}
+
+.up-slot[data-slot="ig-before"], .up-slot[data-slot="ig-after"]{aspect-ratio:4/5; height:auto; min-height:0;}
+.post-rm{display:none; position:absolute; top:8px; left:8px; z-index:6; border:0; border-radius:7px; padding:6px 10px; font-size:12px; font-weight:600; cursor:pointer; background:rgba(120,30,24,.92); color:#fff;}
+body.ed-on .post-rm{display:inline-flex; align-items:center;}
+.post-add{display:none; align-items:center; font-size:13px; font-weight:600; color:#0E0E10; background:#9DB89A; border:0; padding:8px 14px; border-radius:100px; cursor:pointer; margin-left:10px;}
+body.ed-on .post-add{display:inline-flex;}
 </style>
 </head>
 <body>
@@ -1039,11 +1045,11 @@ body.ed-on .up-slot.filled:not(.is-video){cursor:grab;}
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:22px; align-items:start;">
       <div>
         <div style="display:flex; align-items:center; gap:12px; margin-bottom:10px;"><span style="font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:#8C8A85; border:1px solid rgba(255,255,255,.14); padding:5px 12px; border-radius:100px;">Before</span><span style="font-size:13px; color:#8C8A85;">The account when I started</span></div>
-        <div style="border-radius:14px; overflow:hidden; border:1px solid rgba(255,255,255,.08);"><div class="up-slot" data-slot="ig-before" data-mode="natural" data-ph="Instagram — before screenshot" style="width:100%"></div></div>
+        <div style="border-radius:14px; overflow:hidden; border:1px solid rgba(255,255,255,.08);"><div class="up-slot" data-slot="ig-before" data-fit="contain" data-ph="Instagram — before screenshot" style="width:100%"></div></div>
       </div>
       <div>
         <div style="display:flex; align-items:center; gap:12px; margin-bottom:10px;"><span style="font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:#0E0E10; background:#E8D5A3; padding:5px 12px; border-radius:100px; font-weight:600;">After</span><span style="font-size:13px; color:#B8B5AE;">After my work</span></div>
-        <div style="border-radius:14px; overflow:hidden; border:1px solid rgba(232,213,163,.35); box-shadow:0 24px 50px rgba(0,0,0,.45);"><div class="up-slot" data-slot="ig-after" data-mode="natural" data-ph="Instagram — after screenshot" style="width:100%"></div></div>
+        <div style="border-radius:14px; overflow:hidden; border:1px solid rgba(232,213,163,.35); box-shadow:0 24px 50px rgba(0,0,0,.45);"><div class="up-slot" data-slot="ig-after" data-fit="contain" data-ph="Instagram — after screenshot" style="width:100%"></div></div>
       </div>
     </div>
   </div>
@@ -2492,6 +2498,35 @@ body.ed-on .up-slot.filled:not(.is-video){cursor:grab;}
     ov.addEventListener("click", function (e) { if (e.target === ov) ov.remove(); });
   }
 
+  var postGroups = [];
+  function applyPostHidden() {
+    for (var g = 0; g < postGroups.length; g++) { var cs = postGroups[g].cards;
+      for (var i = 0; i < cs.length; i++) cs[i].card.style.display = (state.hidden["post::" + cs[i].sid] ? "none" : ""); }
+  }
+  function initPostCards() {
+    var tracks = document.querySelectorAll(".pscroll-track");
+    Array.prototype.forEach.call(tracks, function (track) {
+      var cards = [];
+      Array.prototype.forEach.call(track.children, function (card) {
+        var slot = card.querySelector(".up-slot[data-slot]"); if (!slot) return;
+        var sid = slot.getAttribute("data-slot");
+        if (getComputedStyle(card).position === "static") card.style.position = "relative";
+        var x = el("button", null, "\u00d7 Remove"); x.type = "button"; x.className = "post-rm editor-ui"; x.title = "Remove this post";
+        x.addEventListener("click", function (e) { e.preventDefault(); e.stopPropagation(); state.hidden["post::" + sid] = 1; save(); applyPostHidden(); });
+        card.appendChild(x); cards.push({ card: card, sid: sid });
+      });
+      if (!cards.length) return;
+      var add = el("button", null, "\uff0b Add post"); add.type = "button"; add.className = "post-add editor-ui";
+      add.addEventListener("click", function (e) { e.preventDefault(); e.stopPropagation();
+        for (var i = 0; i < cards.length; i++) { if (state.hidden["post::" + cards[i].sid]) { delete state.hidden["post::" + cards[i].sid]; save(); applyPostHidden();
+          try { cards[i].card.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" }); } catch (er) {} return; } }
+        toast("All posts in this section are already shown."); });
+      var wrap = track.closest(".pscroll-wrap"); var head = wrap ? wrap.querySelector(".pscroll-head") : null;
+      if (head) head.appendChild(add); else track.parentNode.insertBefore(add, track);
+      postGroups.push({ cards: cards, add: add });
+    });
+    applyPostHidden();
+  }
   function boot() {
     var slots = document.querySelectorAll(".up-slot");
     for (var i = 0; i < slots.length; i++) initSlot(slots[i]);
@@ -2500,7 +2535,7 @@ body.ed-on .up-slot.filled:not(.is-video){cursor:grab;}
     assignText(); applyText(); insertAdded();
     assignLinks(); applyLinks();
     initRemovable();
-    initCarousels(); initReveal(); initAurora(); initContactForm();
+    initCarousels(); initPostCards(); initReveal(); initAurora(); initContactForm();
     document.addEventListener("input", onTextInput, true);
     document.addEventListener("focusin", onFocusIn, true);
     document.addEventListener("click", onClick, true);
