@@ -1704,15 +1704,30 @@ body.ed-on .post-add{display:inline-flex;}
   function normalize(o) { o = o || {}; return {
     slots: o.slots || {}, cleared: o.cleared || {}, text: o.text || {},
     style: o.style || {}, links: o.links || {}, added: o.added || [], hidden: o.hidden || {}, lists: o.lists || {}, imgfit: o.imgfit || {} }; }
+  // Safety net: the published file always ships every image inside EMB. If the
+  // browser's locally-stored state is stale/evicted and is missing slots, refill
+  // them from EMB so images never silently vanish — and, just as important, so a
+  // later Save can't bake a blank state over the good file. Only fills MISSING
+  // slots; never touches local edits and never resurrects an intentional delete.
+  function backfillSlots(s) {
+    if (!EMB || !EMB.slots) return s;
+    s.slots = s.slots || {}; s.cleared = s.cleared || {};
+    for (var id in EMB.slots) {
+      if (!Object.prototype.hasOwnProperty.call(EMB.slots, id)) continue;
+      if (s.cleared[id]) continue;
+      if (s.slots[id] == null) s.slots[id] = EMB.slots[id];
+    }
+    return s;
+  }
   function loadState() {
     if (SHARED) { state = normalize(EMB); return Promise.resolve(); }
     function fromLS() { try { var ls = localStorage.getItem(KEY); if (ls) { state = normalize(JSON.parse(ls)); return true; } } catch (e) {} return false; }
     return idbGet(KEY).then(function (v) {
-      if (typeof v === "string") { state = normalize(JSON.parse(v)); return; }
-      if (fromLS()) return;
+      if (typeof v === "string") { state = normalize(JSON.parse(v)); backfillSlots(state); return; }
+      if (fromLS()) { backfillSlots(state); return; }
       if (EMB) state = normalize(EMB);          // editable-master seed on a fresh browser
     }).catch(function () {
-      if (fromLS()) return;
+      if (fromLS()) { backfillSlots(state); return; }
       if (EMB) state = normalize(EMB);
     });
   }
