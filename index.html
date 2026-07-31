@@ -1781,8 +1781,14 @@ body.ed-on .post-add{display:inline-flex;}
       var m;
       m = u.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/|live\/)|youtu\.be\/)([\w-]{6,})/);
       if (m) return "https://www.youtube.com/embed/" + m[1];
-      m = u.match(/vimeo\.com\/(?:video\/)?(\d+)/);
-      if (m) return "https://player.vimeo.com/video/" + m[1];
+      m = u.match(/vimeo\.com\/(?:video\/)?(\d+)(?:\/(\w+))?/);
+      if (m) {
+        // Preserve the private hash (unlisted videos: vimeo.com/ID/HASH or ?h=HASH)
+        // so the embedded player is authorized without a Vimeo sign-in. dnt=1 asks
+        // Vimeo not to set tracking cookies, which avoids the "allow cookies" prompt.
+        var vhash = m[2] || (u.match(/[?&]h=(\w+)/) || [])[1];
+        return "https://player.vimeo.com/video/" + m[1] + "?dnt=1" + (vhash ? "&h=" + vhash : "");
+      }
       m = u.match(/drive\.google\.com\/file\/d\/([\w-]+)/);
       if (m) return "https://drive.google.com/file/d/" + m[1] + "/preview";
       m = u.match(/drive\.google\.com\/open\?id=([\w-]+)/);
