@@ -13,11 +13,11 @@
   html,body{background:#e9e2d2;}
   body{
     font-family:Arial,"Helvetica Neue",Helvetica,sans-serif;
-    color:var(--ink); font-size:10.6pt; line-height:1.5;
+    color:var(--ink); font-size:9.5pt; line-height:1.34;
     -webkit-print-color-adjust:exact; print-color-adjust:exact;
   }
   .page{
-    width:210mm; min-height:297mm; margin:0 auto; padding:16mm 16mm 14mm;
+    width:210mm; min-height:294mm; margin:0 auto; padding:7mm 15mm 3mm;
     position:relative; overflow:hidden;
     background:
       radial-gradient(55mm 55mm at 92% -2%, rgba(180,137,44,.20), transparent 68%),
@@ -47,48 +47,48 @@
   a{color:var(--gold); text-decoration:none;}
 
   /* header */
-  header{border-bottom:2px solid var(--ink); padding-bottom:12px; margin-bottom:14px;}
-  .name{font-size:30pt; font-weight:800; letter-spacing:-.5px; line-height:1; color:var(--ink);}
+  header{border-bottom:2px solid var(--ink); padding-bottom:7px; margin-bottom:9px;}
+  .name{font-size:24pt; font-weight:800; letter-spacing:-.5px; line-height:1; color:var(--ink);}
   .name .dot{color:var(--gold2);}
-  .role{margin-top:6px; font-size:11.5pt; font-weight:700; color:var(--gold);
+  .role{margin-top:5px; font-size:10.8pt; font-weight:700; color:var(--gold);
     letter-spacing:.3px; text-transform:uppercase;}
   .role .sep{color:var(--green);}
-  .contact{margin-top:9px; font-size:9.4pt; color:var(--muted); line-height:1.7;}
+  .contact{margin-top:7px; font-size:9.4pt; color:var(--muted); line-height:1.5;}
   .contact b{color:var(--ink); font-weight:700;}
-  .contact span{white-space:nowrap;}
-  .contact .pipe{color:var(--line); margin:0 7px;}
+  .contact a{color:var(--gold);}
+  .contact .item{white-space:nowrap;}
+  .contact .sep{color:var(--line); margin:0 7px;}
 
   /* sections */
-  section{margin-top:15px;}
-  h2{font-size:11.5pt; font-weight:800; text-transform:uppercase; letter-spacing:1px;
-    color:var(--ink); display:flex; align-items:center; gap:10px; margin-bottom:9px;
+  section{margin-top:3px;}
+  h2{font-size:10.8pt; font-weight:800; text-transform:uppercase; letter-spacing:1px;
+    color:var(--ink); display:flex; align-items:center; gap:10px; margin-bottom:4px;
     break-after:avoid; page-break-after:avoid;}
-  h2::after{content:""; flex:1; height:2px; border-radius:2px;
+  h2::after{content:""; flex:1; height:1.5px; border-radius:2px;
     background:linear-gradient(90deg,var(--gold2),rgba(95,122,91,.5) 60%,transparent);}
-  .summary{color:#3a352e; font-size:10.6pt;}
+  .summary{color:#3a352e; font-size:9.3pt; line-height:1.32;}
 
-  /* skills chips */
-  .chips{display:flex; flex-wrap:wrap; gap:6px 7px;}
-  .chip{border:1px solid var(--line); background:rgba(255,255,255,.5);
-    border-radius:20px; padding:4px 11px; font-size:9.2pt; color:#3d382f; font-weight:600;}
+  /* skill / tool / language lines — read left-to-right, one flow (ATS-safe) */
+  .taglist{font-size:9.0pt; color:#3d382f; line-height:1.42;}
+  .taglist .sp{color:var(--gold2); margin:0 5px; font-weight:700;}
 
   /* experience */
-  .job{margin-bottom:12px; page-break-inside:avoid;}
+  .job{margin-bottom:4px; page-break-inside:avoid;}
   .job-h{display:flex; justify-content:space-between; align-items:baseline; gap:12px;}
-  .job-t{font-size:10.8pt; font-weight:800; color:var(--ink);}
+  .job-t{font-size:9.7pt; font-weight:800; color:var(--ink);}
   .job-c{font-weight:700; color:var(--gold);}
-  .job-d{font-size:9pt; color:var(--soft); font-weight:700; white-space:nowrap;}
-  ul{list-style:none; margin-top:5px;}
-  li{position:relative; padding-left:15px; margin-bottom:3px; color:#3a352e; font-size:10.2pt;}
-  li::before{content:""; position:absolute; left:2px; top:8px; width:5px; height:5px;
-    border-radius:50%; background:var(--green);}
-  li b{color:var(--ink); font-weight:700;}
+  .job-r{text-align:right; white-space:nowrap;}
+  .job-d{font-size:8.7pt; color:var(--soft); font-weight:700;}
+  .job-d .dsep{color:var(--line);}
+  .job-loc{font-size:8.6pt; color:var(--soft); font-weight:600; margin-top:1px;}
 
-  .two{display:grid; grid-template-columns:1fr 1fr; gap:6px 26px;}
-  .kv{font-size:10.2pt; color:#3a352e;}
-  .kv b{color:var(--ink);}
-  .ach li::before{background:var(--gold2);}
-  .foot{margin-top:16px; padding-top:8px; border-top:1px solid var(--line);
+  ul{list-style:none; margin-top:1px;}
+  li{padding-left:12px; text-indent:-12px; margin-bottom:1px; color:#3a352e; font-size:9.2pt;}
+  li .bl{color:var(--green); font-weight:800; margin-right:5px;}
+  li b{color:var(--ink); font-weight:700;}
+  .ach li .bl{color:var(--gold2);}
+
+  .foot{margin-top:5px; padding-top:4px; border-top:1px solid var(--line);
     font-size:8.4pt; color:var(--soft); text-align:center; letter-spacing:.3px;}
   @page{size:A4; margin:0;}
 </style>
@@ -101,37 +101,26 @@
     <div class="name">SOYLI SAHEDOVA<span class="dot">.</span></div>
     <div class="role">Digital Marketing Specialist <span class="sep">·</span> Graphic &amp; Motion Designer</div>
     <div class="contact">
-      <span><b>Email:</b> sahedowasoyli8@gmail.com</span><span class="pipe">|</span>
-      <span><b>Phone:</b> +993 65 82-11-18</span><span class="pipe">|</span>
-      <span><b>Location:</b> Turkmenistan · Open to Remote / Worldwide</span><br>
-      <span><b>LinkedIn:</b> linkedin.com/in/soyli-sahedova</span><span class="pipe">|</span>
-      <span><b>Behance:</b> behance.net/soylisahedova</span><span class="pipe">|</span>
-      <span><b>Instagram:</b> @soyli_s_11</span>
+      <span class="item"><b>Email:</b> <a href="mailto:sahedowasoyli8@gmail.com">sahedowasoyli8@gmail.com</a></span><span class="sep">·</span>
+      <span class="item"><b>Phone:</b> +993 65 82-11-18</span><br>
+      <span class="item"><b>Location:</b> Ashgabat, Turkmenistan — Open to Remote / Worldwide</span><br>
+      <span class="item"><b>LinkedIn:</b> <a href="https://linkedin.com/in/soyli-sahedova">https://linkedin.com/in/soyli-sahedova</a></span><span class="sep">·</span>
+      <span class="item"><b>Behance:</b> <a href="https://behance.net/soylisahedova">https://behance.net/soylisahedova</a></span><br>
+      <span class="item"><b>Instagram:</b> <a href="https://instagram.com/soyli_s_11">https://instagram.com/soyli_s_11</a></span>
     </div>
   </header>
 
   <section>
     <h2>Professional Summary</h2>
     <p class="summary">Digital marketing specialist and designer with <b>5+ years of experience</b> who owns the whole
-    journey from strategy to sales. I start by building a <b>full marketing plan</b> for the business, then create the
-    <b>visuals and high-end 2D motion graphics</b> that bring it to life, and <b>run it as paid campaigns on Meta ads</b> —
-    from audience and creative to budgets and optimisation. One person, the complete funnel: plan it, design it, launch it,
-    and grow it with measurable, revenue-focused results.</p>
+    journey from strategy to sales — I build the <b>full marketing plan</b>, create the <b>visuals and high-end 2D motion
+    graphics</b> that bring it to life, and <b>run it as paid campaigns on Meta ads</b>. One person, the complete funnel:
+    plan it, design it, launch it, and grow it with measurable, revenue-focused results.</p>
   </section>
 
   <section>
     <h2>Core Skills</h2>
-    <div class="chips">
-      <span class="chip">Digital Marketing</span><span class="chip">Social Media Marketing</span>
-      <span class="chip">Content Strategy</span><span class="chip">Brand Identity &amp; Branding</span>
-      <span class="chip">Graphic Design</span><span class="chip">2D Motion Graphics</span>
-      <span class="chip">Video Editing</span><span class="chip">Paid Media (Meta &amp; Google Ads)</span>
-      <span class="chip">SEO</span><span class="chip">Marketing Funnels &amp; Full-Funnel Strategy</span>
-      <span class="chip">Email Marketing &amp; Automation</span><span class="chip">Marketing Automation (n8n)</span>
-      <span class="chip">AI-Assisted Design</span><span class="chip">Campaign Management</span>
-      <span class="chip">Copywriting</span><span class="chip">Analytics &amp; Reporting</span>
-      <span class="chip">Logo &amp; Character Animation</span><span class="chip">Packaging &amp; Print Design</span>
-    </div>
+    <p class="taglist">Digital Marketing<span class="sp">·</span>Social Media Marketing<span class="sp">·</span>Content Strategy<span class="sp">·</span>Brand Identity &amp; Branding<span class="sp">·</span>Graphic Design<span class="sp">·</span>2D Motion Graphics<span class="sp">·</span>Video Editing<span class="sp">·</span>Paid Media (Meta &amp; Google Ads)<span class="sp">·</span>SEO<span class="sp">·</span>Marketing Funnels &amp; Full-Funnel Strategy<span class="sp">·</span>Email Marketing &amp; Automation<span class="sp">·</span>Marketing Automation (n8n)<span class="sp">·</span>AI-Assisted Design<span class="sp">·</span>Campaign Management<span class="sp">·</span>Copywriting<span class="sp">·</span>Analytics &amp; Reporting<span class="sp">·</span>Logo &amp; Character Animation<span class="sp">·</span>Packaging &amp; Print Design</p>
   </section>
 
   <section>
@@ -139,47 +128,47 @@
 
     <div class="job">
       <div class="job-h"><div class="job-t">Digital Marketing Specialist <span class="job-c">— SalesShortcut AI Marketing Agency</span></div>
-        <div class="job-d">Apr 2026 – Present</div></div>
+        <div class="job-r"><div class="job-d">Remote (US) <span class="dsep">·</span> Apr 2026 – Present</div></div></div>
       <ul>
-        <li>Lead brand and marketing direction for a US-based SaaS company, owning social media strategy, creative production and paid campaigns.</li>
-        <li>Grew a brand-new account from zero: <b>+684.9% LinkedIn impressions</b> in 30 days, plus <b>+396% Instagram reach</b> (932 accounts), <b>+298% content views</b> (2.8K) and <b>+181% content interactions</b> (205) — all through organic social.</li>
-        <li>Designed a four-step email outreach sequence and built an automated <b>n8n + AI workflow</b> that finds leads, extracts emails, personalizes each message with AI and sends them — a full lead-generation pipeline.</li>
-        <li>Built an <b>AI Marketing Agent</b> in n8n (Google Gemini) that analyzes a business, its competitors and niche, then returns a marketing funnel, promotion plan and first 10 growth steps.</li>
+        <li><span class="bl">•</span>Lead brand and marketing direction for a US-based SaaS company, owning social media strategy, creative production and paid campaigns.</li>
+        <li><span class="bl">•</span>Grew a brand-new account from zero: <b>+684.9% LinkedIn impressions</b> in 30 days, plus <b>+396% Instagram reach</b> (932 accounts), <b>+298% content views</b> (2.8K) and <b>+181% content interactions</b> (205) — all through organic social.</li>
+        <li><span class="bl">•</span>Designed a four-step email outreach sequence and built an automated <b>n8n + AI workflow</b> that finds leads, extracts emails, personalizes each message with AI and sends them — a full lead-generation pipeline.</li>
+        <li><span class="bl">•</span>Built an <b>AI Marketing Agent</b> in n8n (Google Gemini) that analyzes a business, its competitors and niche, then returns a marketing funnel, promotion plan and first 10 growth steps.</li>
       </ul>
     </div>
 
     <div class="job">
       <div class="job-h"><div class="job-t">Motion Designer <span class="job-c">— Great Silk Road Network</span></div>
-        <div class="job-d">Mar 2026 – Present</div></div>
+        <div class="job-r"><div class="job-d">Ashgabat, Turkmenistan <span class="dsep">·</span> Mar 2026 – Present</div></div></div>
       <ul>
-        <li>Produce 2D motion graphics, logo animations and social video content for brand campaigns.</li>
-        <li>Deliver daily motion and static creative aligned to content calendars and publishing schedules.</li>
+        <li><span class="bl">•</span>Produce 2D motion graphics, logo animations and social video content for brand campaigns.</li>
+        <li><span class="bl">•</span>Deliver daily motion and static creative aligned to content calendars and publishing schedules.</li>
       </ul>
     </div>
 
     <div class="job">
       <div class="job-h"><div class="job-t">Graphic &amp; Motion Designer <span class="job-c">— Freelance</span></div>
-        <div class="job-d">Jan 2026 – Present</div></div>
+        <div class="job-r"><div class="job-d">Remote <span class="dsep">·</span> Jan 2026 – Present</div></div></div>
       <ul>
-        <li>Provide end-to-end graphic design and 2D motion graphics for founders and small businesses, turning briefs into scroll-stopping social creative, ad sets and brand assets.</li>
+        <li><span class="bl">•</span>Provide end-to-end graphic design and 2D motion graphics for founders and small businesses, turning briefs into scroll-stopping social creative, ad sets and brand assets.</li>
       </ul>
     </div>
 
     <div class="job">
       <div class="job-h"><div class="job-t">Graphic &amp; Motion Designer <span class="job-c">— 100haryt.com (E-commerce)</span></div>
-        <div class="job-d">Jun 2023 – Jan 2026</div></div>
+        <div class="job-r"><div class="job-d">Ashgabat, Turkmenistan <span class="dsep">·</span> Jun 2023 – Jan 2026</div></div></div>
       <ul>
-        <li>Designed landing-page banners, promotional creatives and daily social media posts for an e-commerce marketplace.</li>
-        <li>Produced full-funnel social content and paid-ad creative that supported brand visibility and sales.</li>
+        <li><span class="bl">•</span>Designed landing-page banners, promotional creatives and daily social media posts for an e-commerce marketplace.</li>
+        <li><span class="bl">•</span>Produced full-funnel social content and paid-ad creative that supported brand visibility and sales.</li>
       </ul>
     </div>
 
     <div class="job">
       <div class="job-h"><div class="job-t">Graphic Designer <span class="job-c">— Taze Market (E-commerce)</span></div>
-        <div class="job-d">May 2021 – Mar 2023</div></div>
+        <div class="job-r"><div class="job-d">Ashgabat, Turkmenistan <span class="dsep">·</span> May 2021 – Mar 2023</div></div></div>
       <ul>
-        <li>Created social media ads, promotional graphics and print design for a retail e-commerce brand.</li>
-        <li>Delivered consistent brand visuals across digital and printed channels.</li>
+        <li><span class="bl">•</span>Created social media ads, promotional graphics and print design for a retail e-commerce brand.</li>
+        <li><span class="bl">•</span>Delivered consistent brand visuals across digital and printed channels.</li>
       </ul>
     </div>
   </section>
@@ -187,46 +176,36 @@
   <section>
     <h2>Key Achievements</h2>
     <ul class="ach">
-      <li><b>Employee of the Year</b> — recognized for consistent, high-impact delivery and reliability.</li>
+      <li><span class="bl">•</span><b>Employee of the Year</b> — 100haryt.com, 2024 — recognized for consistent, high-impact delivery and reliability.</li>
     </ul>
   </section>
 
   <section>
     <h2>Education</h2>
     <div class="job-h"><div class="job-t">International Economics <span class="job-c">— International University for the Humanities and Development</span></div>
-      <div class="job-d">2020 – 2025</div></div>
+      <div class="job-r"><div class="job-d">Ashgabat, Turkmenistan <span class="dsep">·</span> 2020 – 2025</div></div></div>
   </section>
 
   <section>
     <h2>Certifications</h2>
     <ul>
-      <li><b>Foundations of Digital Marketing and E-commerce</b> — Google, via Coursera (Jul 2026) · Credential ID 87MSN1234K9L</li>
-      <li><b>Digital Marketing</b> — Illinois Tech, via Coursera (Jul 2026) · Credential ID Y6LUWHGLYZ0W</li>
-      <li><b>Capstone Project: Digital Marketing and Growth Hacking</b> — IBM, via Coursera (Jul 2026) · Credential ID KNU8XV50HUZX</li>
+      <li><span class="bl">•</span><b>Foundations of Digital Marketing and E-commerce</b> — Google, via Coursera (Jul 2026) · Credential ID 87MSN1234K9L</li>
+      <li><span class="bl">•</span><b>Digital Marketing</b> — Illinois Tech, via Coursera (Jul 2026) · Credential ID Y6LUWHGLYZ0W</li>
+      <li><span class="bl">•</span><b>Capstone Project: Digital Marketing and Growth Hacking</b> — IBM, via Coursera (Jul 2026) · Credential ID KNU8XV50HUZX</li>
     </ul>
   </section>
 
   <section>
     <h2>Tools &amp; Technologies</h2>
-    <div class="chips">
-      <span class="chip">Adobe After Effects</span><span class="chip">Adobe Photoshop</span>
-      <span class="chip">Adobe Illustrator</span><span class="chip">Adobe Premiere Pro</span>
-      <span class="chip">Adobe Lightroom</span><span class="chip">Figma</span>
-      <span class="chip">Canva</span><span class="chip">n8n</span><span class="chip">Google Gemini</span>
-    </div>
+    <p class="taglist">Adobe After Effects<span class="sp">·</span>Adobe Photoshop<span class="sp">·</span>Adobe Illustrator<span class="sp">·</span>Adobe Premiere Pro<span class="sp">·</span>Adobe Lightroom<span class="sp">·</span>Figma<span class="sp">·</span>Canva<span class="sp">·</span>n8n<span class="sp">·</span>Google Gemini</p>
   </section>
 
   <section>
     <h2>Languages</h2>
-    <div class="two">
-      <div class="kv"><b>English</b> — Professional working</div>
-      <div class="kv"><b>Turkmen</b> — Native</div>
-      <div class="kv"><b>Russian</b> — Fluent</div>
-      <div class="kv"><b>Turkish</b> — Fluent</div>
-    </div>
+    <p class="taglist">English — Professional working<span class="sp">·</span>Turkmen — Native<span class="sp">·</span>Russian — Fluent<span class="sp">·</span>Turkish — Fluent</p>
   </section>
 
-  <div class="foot">Soyli Sahedova · Digital Marketing Specialist &amp; Creative Director · sahedowasoyli8@gmail.com</div>
+  <div class="foot">Soyli Sahedova · Digital Marketing Specialist · Graphic &amp; Motion Designer · sahedowasoyli8@gmail.com</div>
 
 </div>
 </body>
