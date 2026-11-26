@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Soyli Sahedova — Portfolio</title>
+<meta name="description" content="Soyli (Sophie) Sahedova — Digital Marketing Specialist, Graphic & Motion Designer based in Ho Chi Minh City.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Yellowtail&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#F6EFE4; --cream-2:#FBF6EE; --paper:#FFFFFF;
+  --ink:#201C18; --ink-2:#3A332C; --muted:#857B70;
+  --rust:#BE4A2F; --rust-deep:#9E3A24; --peach-1:#F7D8C0; --peach-2:#F3E7D6;
+  --line:#E6DBCB; --charcoal:#23201C; --gold:#E0A96D;
+  --shadow:0 24px 60px -22px rgba(60,40,25,.35);
+  --shadow-sm:0 12px 30px -14px rgba(60,40,25,.28);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Plus Jakarta Sans",system-ui,sans-serif;
+  background:var(--cream); color:var(--ink);
+  font-size:17px; line-height:1.6; -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+.serif{font-family:"Fraunces",serif}
+.script{font-family:"Yellowtail",cursive;font-weight:400}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+.eyebrow{font-size:12.5px;letter-spacing:.22em;text-transform:uppercase;font-weight:700;color:var(--rust)}
+.btn{display:inline-flex;align-items:center;gap:9px;background:var(--ink);color:var(--cream-2);
+  padding:13px 22px;border-radius:40px;font-weight:700;font-size:14.5px;letter-spacing:.01em;
+  transition:transform .25s ease,background .25s ease}
+.btn:hover{transform:translateY(-2px);background:var(--rust)}
+.btn.rust{background:var(--rust)}.btn.rust:hover{background:var(--rust-deep)}
+.btn svg{width:16px;height:16px}
+
+/* ============ NAV ============ */
+header.nav{position:sticky;top:0;z-index:60;backdrop-filter:blur(10px);
+  background:rgba(246,239,228,.82);border-bottom:1px solid rgba(230,219,203,.7)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;height:68px}
+.brand{font-family:"Fraunces",serif;font-weight:700;font-size:21px;letter-spacing:-.01em}
+.brand b{color:var(--rust)}
+.nav-links{display:flex;align-items:center;gap:30px}
+.nav-links a.lk{font-weight:600;font-size:14.5px;color:var(--ink-2);position:relative}
+.nav-links a.lk::after{content:"";position:absolute;left:0;bottom:-6px;height:2px;width:0;background:var(--rust);transition:width .25s}
+.nav-links a.lk:hover::after{width:100%}
+.menu-btn{display:none;background:none;border:0;font-size:26px;color:var(--ink);cursor:pointer}
+
+/* ============ HERO ============ */
+.hero{position:relative;padding:34px 0 70px;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;z-index:0;
+  background:
+   radial-gradient(60% 55% at 50% 12%, rgba(247,216,192,.85), transparent 70%),
+   radial-gradient(70% 60% at 85% 80%, rgba(224,169,109,.28), transparent 70%),
+   radial-gradient(60% 60% at 10% 70%, rgba(243,231,214,.9), transparent 70%)}
+.hero-grid{position:relative;z-index:2;display:grid;grid-template-columns:1fr auto 1fr;
+  align-items:center;gap:0;margin-top:6px}
+.hello{text-align:center;grid-column:1 / -1;margin-bottom:-8px}
+.hello .script{font-size:clamp(30px,4vw,46px);color:var(--rust);display:block;line-height:1;transform:rotate(-4deg)}
+.bigword{font-family:"Fraunces",serif;font-weight:900;font-size:clamp(58px,13.5vw,186px);
+  line-height:.86;letter-spacing:-.03em;text-align:center;grid-column:1 / -1;
+  color:var(--ink);text-transform:uppercase}
+.hero-photo{grid-column:2;position:relative;z-index:3;margin-top:-6%}
+.hero-photo .frame{width:clamp(250px,32vw,360px);aspect-ratio:3/4.1;border-radius:200px 200px 26px 26px;
+  overflow:hidden;box-shadow:var(--shadow);border:7px solid var(--paper);background:var(--charcoal)}
+.hero-photo .frame img{width:100%;height:100%;object-fit:cover;object-position:50% 20%}
+.badge-float{position:absolute;background:var(--paper);border:1px solid var(--line);border-radius:16px;
+  padding:10px 15px;box-shadow:var(--shadow-sm);font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px}
+.badge-float .dot{width:9px;height:9px;border-radius:50%;background:#34C759;box-shadow:0 0 0 4px rgba(52,199,89,.18)}
+.badge-exp{top:14%;right:-6%;flex-direction:column;align-items:flex-start;gap:2px;padding:12px 16px}
+.badge-exp b{font-family:"Fraunces",serif;font-size:24px;color:var(--rust);line-height:1}
+.badge-exp span{font-size:11px;color:var(--muted);font-weight:600}
+
+/* intro card (left) */
+.intro-card{grid-column:1;justify-self:start;max-width:320px;background:var(--paper);
+  border:1px solid var(--line);border-radius:22px;padding:22px 22px 20px;box-shadow:var(--shadow);
+  position:relative;z-index:4;transform:translateX(6%)}
+.intro-card h3{font-family:"Fraunces",serif;font-size:19px;font-weight:700;margin-bottom:9px}
+.intro-card p{font-size:13.5px;color:var(--ink-2);line-height:1.55;margin-bottom:16px}
+
+/* skills panel (right) */
+.skills-panel{grid-column:3;justify-self:end;width:min(300px,92%);background:var(--charcoal);
+  color:#EFE7DB;border-radius:22px;padding:20px 20px 16px;box-shadow:var(--shadow);
+  position:relative;z-index:4;transform:translateX(-6%)}
+.skills-panel h4{font-family:"Fraunces",serif;font-size:20px;font-weight:700;margin-bottom:14px;color:#fff}
+.skill-row{display:flex;align-items:center;justify-content:space-between;
+  background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.07);
+  padding:10px 13px;border-radius:11px;margin-bottom:8px;font-size:13.5px;font-weight:600}
+.skill-row .st{color:var(--gold);font-size:13px;letter-spacing:1px}
+.skill-row.hot{color:#F6B99F}.skill-row.hot .st{color:var(--rust)}
+
+/* tools pill */
+.tools{grid-column:1 / -1;display:flex;justify-content:center;margin-top:30px}
+.tools-pill{display:flex;gap:12px;background:var(--charcoal);padding:12px 18px;border-radius:40px;box-shadow:var(--shadow)}
+.app{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:14px;color:#fff;font-family:"Fraunces",serif;letter-spacing:-.02em}
+.app.ps{background:#001E36;color:#31A8FF}.app.ai{background:#330000;color:#FF9A00}
+.app.pr{background:#00005B;color:#9999FF}.app.ae{background:#00005B;color:#C9A0FF}
+.app.fg{background:#1E1E1E;color:#F24E1E}.app.cv{background:#00C4CC}.app.n8{background:#EA4B71}
+
+/* ============ SECTION SHELL ============ */
+section{position:relative}
+.sec-head{text-align:center;max-width:680px;margin:0 auto 46px}
+.sec-head .script{font-size:clamp(28px,4vw,40px);color:var(--rust);display:block;line-height:1;transform:rotate(-3deg);margin-bottom:4px}
+.sec-head h2{font-family:"Fraunces",serif;font-weight:800;font-size:clamp(32px,5vw,54px);
+  line-height:1;letter-spacing:-.02em;text-transform:uppercase}
+.sec-head p{margin-top:16px;color:var(--muted);font-size:16px}
+.pad{padding:84px 0}
+
+/* ABOUT */
+.about{background:var(--rust);color:#F7ECE0}
+.about .sec-head h2,.about .sec-head .script{color:#fff}
+.about-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:52px;align-items:center}
+.about-photo{position:relative}
+.about-photo .fr{border-radius:24px;overflow:hidden;aspect-ratio:4/4.6;background:var(--charcoal);
+  box-shadow:0 30px 70px -24px rgba(0,0,0,.5);border:6px solid rgba(255,255,255,.14)}
+.about-photo .fr img{width:100%;height:100%;object-fit:cover;object-position:50% 25%}
+.about-photo .tag{position:absolute;bottom:-18px;left:-18px;background:var(--cream-2);color:var(--ink);
+  border-radius:16px;padding:13px 18px;box-shadow:var(--shadow);font-weight:700;font-size:13px;text-align:center}
+.about-photo .tag b{font-family:"Fraunces",serif;color:var(--rust);font-size:22px;display:block;line-height:1}
+.about-body .nm{font-family:"Fraunces",serif;font-weight:800;font-size:clamp(30px,4.3vw,46px);line-height:1;color:#fff}
+.about-body .rl{font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:13px;color:#F4C9B4;margin:12px 0 18px}
+.about-body p.lead{color:#F3E2D5;font-size:16px;line-height:1.7;margin-bottom:22px;max-width:52ch}
+.core{display:grid;grid-template-columns:1fr 1fr;gap:10px 22px;margin-top:6px}
+.core li{list-style:none;display:flex;gap:10px;align-items:flex-start;font-size:14.5px;font-weight:600;color:#FBEFE5}
+.core li::before{content:"";width:8px;height:8px;border-radius:2px;background:var(--gold);margin-top:7px;flex:none;transform:rotate(45deg)}
+
+/* STATS strip */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin-top:52px}
+.stat{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:22px 18px;text-align:center}
+.stat b{font-family:"Fraunces",serif;font-size:clamp(26px,3.3vw,36px);color:#fff;line-height:1;display:block}
+.stat span{display:block;margin-top:8px;font-size:12.5px;font-weight:600;color:#F4CBB7;letter-spacing:.02em}
+
+/* EXPERIENCE + EDUCATION */
+.xp-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px}
+.xp h3{font-family:"Fraunces",serif;font-weight:800;font-size:26px;margin-bottom:22px;display:flex;align-items:center;gap:12px}
+.xp h3 .script{font-size:30px;color:var(--rust);transform:rotate(-4deg)}
+.tl{position:relative;padding-left:26px}
+.tl::before{content:"";position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.tl-item{position:relative;margin-bottom:22px}
+.tl-item::before{content:"";position:absolute;left:-26px;top:4px;width:16px;height:16px;border-radius:50%;
+  background:var(--cream);border:3px solid var(--rust)}
+.tl-item .top{display:flex;justify-content:space-between;gap:12px;align-items:baseline;flex-wrap:wrap}
+.tl-item .t{font-weight:800;font-size:16px}
+.tl-item .d{font-size:12px;font-weight:700;color:var(--rust);white-space:nowrap}
+.tl-item .c{font-weight:600;color:var(--ink-2);font-size:14px;margin-top:1px}
+.tl-item .ds{color:var(--muted);font-size:13.5px;margin-top:5px;line-height:1.5}
+.tl-item .ds b{color:var(--ink)}
+.chip{display:inline-block;background:#F0E4D2;color:var(--rust-deep);font-weight:700;font-size:11px;
+  padding:3px 10px;border-radius:30px;margin-top:7px}
+
+/* PROJECTS */
+.projects{background:var(--cream-2)}
+.proj-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:20px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:22px;overflow:hidden;
+  box-shadow:var(--shadow-sm);transition:transform .3s ease,box-shadow .3s ease;display:flex;flex-direction:column}
+.card:hover{transform:translateY(-6px);box-shadow:var(--shadow)}
+.card .ph{aspect-ratio:16/10;background:linear-gradient(135deg,#2a2622,#4a3f35);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.card .ph img{width:100%;height:100%;object-fit:cover}
+.card .ph .num{position:absolute;top:14px;left:14px;font-family:"Fraunces",serif;font-weight:900;
+  font-size:30px;color:rgba(255,255,255,.92);line-height:1;z-index:2}
+.card .ph .glyph{width:64px;height:64px;opacity:.6;stroke:#F3E7D6;stroke-width:1.4;fill:none}
+.card .ph::after{content:"";position:absolute;inset:0;
+  background-image:radial-gradient(rgba(255,255,255,.07) 1px,transparent 1px);background-size:14px 14px;opacity:.6}
+.ph-a{background:linear-gradient(140deg,#7A2E1C,#3A241B)}
+.ph-b{background:linear-gradient(140deg,#4A4030,#241F18)}
+.ph-c{background:linear-gradient(140deg,#2B2A26,#44372A)}
+.ph-d{background:linear-gradient(140deg,#5A4A33,#2A241C)}
+.card .bd{padding:20px 20px 22px}
+.card .k{font-size:11.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--rust)}
+.card .ti{font-family:"Fraunces",serif;font-weight:700;font-size:20px;margin:7px 0 9px;line-height:1.12}
+.card .tx{font-size:13.5px;color:var(--muted);line-height:1.55}
+.card .mt{margin-top:14px;display:flex;gap:16px;flex-wrap:wrap}
+.card .mt .m b{font-family:"Fraunces",serif;color:var(--ink);font-size:19px;display:block;line-height:1}
+.card .mt .m span{font-size:11px;color:var(--muted);font-weight:600}
+.c-wide{grid-column:span 4}.c-mid{grid-column:span 3}.c-tall{grid-column:span 2}.c-sm{grid-column:span 3}
+.card.feat{grid-column:span 6;flex-direction:row}
+.card.feat .ph{aspect-ratio:auto;width:46%;min-height:320px}
+.card.feat .bd{flex:1;display:flex;flex-direction:column;justify-content:center;padding:40px}
+.card.feat .ti{font-size:30px;margin:10px 0 14px}
+.card.feat .tx{font-size:15px;max-width:46ch}
+
+/* CONTACT */
+.contact{background:var(--charcoal);color:#F2E9DD}
+.contact-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:50px;align-items:center}
+.contact .script{font-size:clamp(30px,4vw,44px);color:var(--gold);display:block;transform:rotate(-3deg);line-height:1}
+.contact h2{font-family:"Fraunces",serif;font-weight:900;font-size:clamp(46px,8vw,96px);line-height:.9;text-transform:uppercase;color:#fff;letter-spacing:-.02em}
+.contact .sub{color:#D8CBBB;margin:18px 0 26px;max-width:42ch;font-size:16px}
+.crow{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.crow .ic{width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;flex:none}
+.crow .ic svg{width:19px;height:19px;stroke:var(--gold)}
+.crow .lb{font-size:11.5px;color:#A99C8C;font-weight:600;text-transform:uppercase;letter-spacing:.08em}
+.crow .vl{font-weight:700;font-size:15.5px;color:#fff}
+.contact-photo .fr{border-radius:24px;overflow:hidden;aspect-ratio:4/4.7;background:#000;border:6px solid rgba(255,255,255,.1);box-shadow:0 30px 70px -24px rgba(0,0,0,.6)}
+.contact-photo .fr img{width:100%;height:100%;object-fit:cover;object-position:50% 20%}
+.socials{display:flex;gap:12px;margin-top:24px}
+.socials a{padding:10px 18px;border:1px solid rgba(255,255,255,.18);border-radius:40px;font-weight:700;font-size:13.5px;transition:.25s}
+.socials a:hover{background:var(--rust);border-color:var(--rust);transform:translateY(-2px)}
+footer{background:var(--charcoal);color:#8C8072;text-align:center;padding:26px;font-size:13px;border-top:1px solid rgba(255,255,255,.07)}
+footer b{color:#C9BBA9}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+.rv.in{opacity:1;transform:none}
+
+/* ============ RESPONSIVE ============ */
+@media(max-width:900px){
+  body{font-size:16px}
+  .nav-links .lk{display:none}
+  .menu-btn{display:block}
+  .hero-grid{display:block;text-align:center}
+  .bigword{font-size:17.5vw}
+  .hero-photo{margin:22px auto 0;display:flex;justify-content:center}
+  .badge-exp{right:2%}
+  .intro-card,.skills-panel{max-width:460px;width:100%;margin:22px auto 0;transform:none!important;justify-self:center}
+  .about-grid{grid-template-columns:1fr;gap:40px}
+  .about-photo{max-width:400px;margin:0 auto}
+  .about-photo .tag{left:0}
+  .core{grid-template-columns:1fr}
+  .stats{grid-template-columns:1fr 1fr;gap:14px}
+  .xp-grid{grid-template-columns:1fr;gap:48px}
+  .proj-grid{grid-template-columns:1fr}
+  .c-wide,.c-mid,.c-tall,.c-sm,.card.feat{grid-column:span 1}
+  .card.feat{flex-direction:column}
+  .card.feat .ph{width:100%;min-height:220px}
+  .card.feat .bd{padding:26px}
+  .contact-grid{grid-template-columns:1fr;gap:36px}
+  .contact-photo{max-width:380px;margin:0 auto;order:-1}
+  .pad{padding:64px 0}
+}
+@media(max-width:520px){
+  .wrap{padding:0 18px}
+  .bigword{font-size:16vw}
+  .stats{grid-template-columns:1fr 1fr}
+  .tools-pill{gap:8px;padding:10px 12px}
+  .app{width:38px;height:38px}
+  .socials{flex-wrap:wrap}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<header class="nav">
+  <div class="wrap nav-in">
+    <a href="#top" class="brand">Soyli<b>.</b>Sahedova</a>
+    <nav class="nav-links">
+      <a class="lk" href="#about">About</a>
+      <a class="lk" href="#experience">Experience</a>
+      <a class="lk" href="#work">Work</a>
+      <a class="btn rust" href="#contact">Let's talk
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <button class="menu-btn" aria-label="menu">☰</button>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div class="hello"><span class="script">My</span></div>
+    <div class="bigword">Portfolio</div>
+
+    <div class="intro-card rv">
+      <h3>Digital Marketing<br>Specialist &amp; Designer</h3>
+      <p>I'm a marketing designer with 5+ years turning ideas into brands that grow — I plan the strategy, design the visuals &amp; motion, and run the paid campaigns. The full funnel, start to finish.</p>
+      <a class="btn rust" href="#contact">Work With Me
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+
+    <div class="hero-photo rv">
+      <div class="frame"><img src="assets/img/soyli-hero.jpg" alt="Soyli Sahedova"></div>
+      <div class="badge-float badge-exp"><b>5+</b><span>Years of<br>experience</span></div>
+      <div class="badge-float" style="bottom:12%;left:-10%"><span class="dot"></span>Open to work</div>
+    </div>
+
+    <aside class="skills-panel rv">
+      <h4>Skills</h4>
+      <div class="skill-row">Brand Identity <span class="st">★★★★★</span></div>
+      <div class="skill-row">Social Media Design <span class="st">★★★★★</span></div>
+      <div class="skill-row">2D Motion Graphics <span class="st">★★★★★</span></div>
+      <div class="skill-row">Paid Media · Meta Ads <span class="st">★★★★☆</span></div>
+      <div class="skill-row">Content &amp; Copywriting <span class="st">★★★★☆</span></div>
+      <div class="skill-row hot">Marketing Automation <span class="st">★★★★★</span></div>
+    </aside>
+
+    <div class="tools">
+      <div class="tools-pill">
+        <div class="app ps">Ps</div><div class="app ai">Ai</div><div class="app pr">Pr</div>
+        <div class="app ae">Ae</div><div class="app fg">Fg</div><div class="app cv">Cv</div><div class="app n8">n8</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about pad" id="about">
+  <div class="wrap">
+    <div class="sec-head rv"><span class="script">About</span><h2>Me</h2></div>
+    <div class="about-grid">
+      <div class="about-photo rv">
+        <div class="fr"><img src="assets/img/soyli-sitting.jpg" alt="Soyli Sahedova portrait"></div>
+        <div class="tag"><b>C2</b>English<br>EF SET 86/100</div>
+      </div>
+      <div class="about-body rv">
+        <div class="nm">Soyli <span class="script" style="font-size:.7em;color:#F4C9B4">(Sophie)</span> Sahedova</div>
+        <div class="rl">Digital Marketing Specialist · Motion Designer</div>
+        <p class="lead">Based in Ho Chi Minh City and working on-site, hybrid or remote. I'm the complete creative funnel in one person — I build the marketing plan, design the brand visuals and high-end 2D motion that bring it to life, then launch and grow it as paid campaigns with measurable, revenue-focused results.</p>
+        <ul class="core">
+          <li>Full-Funnel Marketing Strategy</li>
+          <li>Brand &amp; Visual Identity</li>
+          <li>2D Motion Graphics &amp; Video</li>
+          <li>Paid Media — Meta &amp; Google Ads</li>
+          <li>Marketing Automation (n8n + AI)</li>
+          <li>Content &amp; Copywriting</li>
+        </ul>
+      </div>
+    </div>
+    <div class="stats rv">
+      <div class="stat"><b>+684.9%</b><span>LinkedIn impressions · 30 days</span></div>
+      <div class="stat"><b>+396%</b><span>Instagram reach</span></div>
+      <div class="stat"><b>5+</b><span>Years in design &amp; marketing</span></div>
+      <div class="stat"><b>2024</b><span>Employee of the Year</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE + EDUCATION -->
+<section class="pad" id="experience">
+  <div class="wrap">
+    <div class="sec-head rv"><span class="script">My</span><h2>Journey</h2></div>
+    <div class="xp-grid">
+      <div class="xp rv">
+        <h3><span class="script">Work</span> Experience</h3>
+        <div class="tl">
+          <div class="tl-item">
+            <div class="top"><span class="t">Digital Marketing Specialist</span><span class="d">Apr 2026 – Now</span></div>
+            <div class="c">SalesShortcut — AI Marketing Agency · Remote (US)</div>
+            <div class="ds">Own brand, social strategy &amp; paid campaigns for a US SaaS. Grew a new account <b>+684.9% on LinkedIn</b> in 30 days and built an <b>n8n + AI</b> lead-gen pipeline.</div>
+          </div>
+          <div class="tl-item">
+            <div class="top"><span class="t">Motion Designer</span><span class="d">Mar 2026 – Now</span></div>
+            <div class="c">Great Silk Road Network · Ashgabat</div>
+            <div class="ds">2D motion, logo animation &amp; social video for DHL Turkmenistan, GSR &amp; Toyota BYY; daily creative plus paid Meta campaigns.</div>
+          </div>
+          <div class="tl-item">
+            <div class="top"><span class="t">Graphic &amp; Motion Designer</span><span class="d">2023 – 2026</span></div>
+            <div class="c">100haryt.com — E-commerce · Ashgabat</div>
+            <div class="ds">Full-funnel social content &amp; ad creative for a 100,000+ product marketplace.<span class="chip">Employee of the Year 2024</span></div>
+          </div>
+          <div class="tl-item">
+            <div class="top"><span class="t">Graphic Designer</span><span class="d">2021 – 2023</span></div>
+            <div class="c">Taze Market — E-commerce · Ashgabat</div>
+            <div class="ds">Social ads, promo graphics &amp; print, consistent across digital and print channels.</div>
+          </div>
+        </div>
+      </div>
+      <div class="xp rv">
+        <h3><span class="script">Education</span> &amp; Certs</h3>
+        <div class="tl">
+          <div class="tl-item">
+            <div class="top"><span class="t">BA, International Economics</span><span class="d">2020 – 2025</span></div>
+            <div class="c">Int'l University for the Humanities &amp; Development</div>
+          </div>
+          <div class="tl-item">
+            <div class="top"><span class="t">Digital Marketing &amp; E-commerce</span><span class="d">Google</span></div>
+            <div class="c">Foundations · via Coursera</div>
+          </div>
+          <div class="tl-item">
+            <div class="top"><span class="t">Digital Marketing</span><span class="d">Illinois Tech</span></div>
+            <div class="c">Professional certificate · via Coursera</div>
+          </div>
+          <div class="tl-item">
+            <div class="top"><span class="t">Growth Hacking — Capstone</span><span class="d">IBM</span></div>
+            <div class="c">Digital Marketing &amp; Growth · via Coursera</div>
+          </div>
+          <div class="tl-item">
+            <div class="top"><span class="t">EF SET English — C2 Proficient</span><span class="d">86/100</span></div>
+            <div class="c">Excellent written &amp; spoken English</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WORK / PROJECTS -->
+<section class="projects pad" id="work">
+  <div class="wrap">
+    <div class="sec-head rv"><span class="script">Sample</span><h2>Projects</h2><p>A few campaigns and motion pieces I planned, designed and launched end-to-end.</p></div>
+    <div class="proj-grid">
+
+      <article class="card feat rv">
+        <div class="ph"><img src="assets/img/soyli-laptop.jpg" alt="Great Silk Road explainer"><span class="num">01</span></div>
+        <div class="bd">
+          <span class="k">2D Motion · Corporate Explainer</span>
+          <h3 class="ti">Great Silk Road — Corporate Explainer</h3>
+          <p class="tx">A polished 2D animated explainer produced for the GSR Network, featuring DHL Turkmenistan and Toyota BYY — logo animation, iconography and narrative motion built in After Effects to tell the corporate story in under a minute.</p>
+          <div class="mt">
+            <div class="m"><b>After Effects</b><span>Animation &amp; design</span></div>
+            <div class="m"><b>DHL · GSR · Toyota</b><span>Brands</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card c-mid rv">
+        <div class="ph ph-a"><span class="num">02</span>
+          <svg class="glyph" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1" fill="#F3E7D6" stroke="none"/></svg></div>
+        <div class="bd">
+          <span class="k">Social Campaign · Meta Ads</span>
+          <h3 class="ti">Toyota — Official Service &amp; Genuine Oils</h3>
+          <p class="tx">Creative, copy and paid rollout for Toyota's official service message — static &amp; motion ads run on Meta with tight cost control.</p>
+          <div class="mt">
+            <div class="m"><b>45,209</b><span>People reached</span></div>
+            <div class="m"><b>$0.08</b><span>Per profile visit</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card c-sm rv">
+        <div class="ph ph-b"><span class="num">03</span>
+          <svg class="glyph" viewBox="0 0 24 24"><path d="M3 17l5-5 4 4 8-8" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 8h4v4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="bd">
+          <span class="k">Growth · Organic Social</span>
+          <h3 class="ti">SalesShortcut — Zero-to-Launch Growth</h3>
+          <p class="tx">Took a brand-new SaaS account from zero with organic social — strategy, content and daily creative.</p>
+          <div class="mt">
+            <div class="m"><b>+684.9%</b><span>LinkedIn impressions</span></div>
+            <div class="m"><b>+396%</b><span>Instagram reach</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card c-mid rv">
+        <div class="ph ph-c"><span class="num">04</span>
+          <svg class="glyph" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.4"/><circle cx="18" cy="6" r="2.4"/><circle cx="12" cy="18" r="2.4"/><path d="M8 7l3 9M16 7l-3 9M8.3 6h7.4" stroke-linecap="round"/></svg></div>
+        <div class="bd">
+          <span class="k">AI &amp; Automation · n8n</span>
+          <h3 class="ti">AI Marketing Agent &amp; Lead Pipeline</h3>
+          <p class="tx">An automation built in n8n that finds leads, extracts &amp; personalizes outreach with AI, and returns a full marketing funnel, promo plan and first 10 growth steps for any business.</p>
+          <div class="mt">
+            <div class="m"><b>n8n + AI</b><span>Built end-to-end</span></div>
+            <div class="m"><b>4-step</b><span>Email sequence</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card c-sm rv">
+        <div class="ph ph-d"><span class="num">05</span>
+          <svg class="glyph" viewBox="0 0 24 24"><circle cx="13.5" cy="6.5" r="1.3" fill="#F3E7D6" stroke="none"/><circle cx="17.5" cy="11" r="1.3" fill="#F3E7D6" stroke="none"/><circle cx="6.5" cy="12" r="1.3" fill="#F3E7D6" stroke="none"/><path d="M12 3a9 9 0 1 0 0 18c1.4 0 2-1 2-2 0-1.4-1-1.6-1-3 0-1 .8-2 2.2-2H18a3 3 0 0 0 3-3c0-3.9-4-6-9-6z"/></svg></div>
+        <div class="bd">
+          <span class="k">Brand &amp; Print</span>
+          <h3 class="ti">E-commerce Brand Creative</h3>
+          <p class="tx">Landing-page banners, promo creative and daily social for 100,000+ product marketplaces — digital and print, always on-brand.</p>
+          <div class="mt">
+            <div class="m"><b>100k+</b><span>Products supported</span></div>
+            <div class="m"><b>Daily</b><span>Social &amp; ads</span></div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact pad" id="contact">
+  <div class="wrap">
+    <div class="contact-grid">
+      <div class="rv">
+        <span class="script">Let's</span>
+        <h2>Connect</h2>
+        <p class="sub">Open to on-site, hybrid and remote roles — and to freelance projects. Let's create something that grows.</p>
+        <div class="crow">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></div>
+          <div><div class="lb">Email</div><a class="vl" href="mailto:sahedowasoyli8@gmail.com">sahedowasoyli8@gmail.com</a></div>
+        </div>
+        <div class="crow">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z"/></svg></div>
+          <div><div class="lb">Phone · WhatsApp</div><a class="vl" href="https://wa.me/84931806573">+84 931 806 573</a></div>
+        </div>
+        <div class="crow">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0Z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <div><div class="lb">Location</div><span class="vl">Ho Chi Minh City, Vietnam</span></div>
+        </div>
+        <div class="socials">
+          <a href="https://linkedin.com/in/soyli-sahedova">LinkedIn</a>
+          <a href="https://behance.net/soylisahedova">Behance</a>
+          <a href="https://soylisportfolio.com">Portfolio</a>
+        </div>
+      </div>
+      <div class="contact-photo rv">
+        <div class="fr"><img src="assets/img/soyli-laptop.jpg" alt="Soyli Sahedova"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>© 2026 <b>Soyli (Sophie) Sahedova</b> · Digital Marketing Specialist &amp; Motion Designer · Ho Chi Minh City</footer>
+
+<script>
+// scroll reveal
+const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
+document.querySelectorAll('.rv').forEach((el,i)=>{el.style.transitionDelay=(i%4*60)+'ms';io.observe(el)});
+</script>
+</body>
+</html>
