@@ -110,7 +110,8 @@ section img, section video, section iframe{border-radius:16px;}
   letter-spacing:-.04em !important;max-width:15ch;margin:0 auto 26px !important;text-wrap:balance;}
 #hero p{margin:0 auto 34px !important;text-align:center;max-width:620px !important;}
 #hero>div>div[style*="display:flex"]{justify-content:center;}        /* CTAs + stats rows */
-#hero>div:nth-of-type(2){display:none !important;}                   /* drop hero photo: pure type hero */
+#hero>div:nth-of-type(2){display:block !important;width:min(320px,78vw);margin:50px auto 0;}  /* centered framed portrait */
+#hero>div:nth-of-type(2)>div{margin:0 auto !important;}
 /* animated gradient emphasis words in the headline */
 #hero h1 span{background:linear-gradient(100deg,#FFB079,#FF8A3C,#FF5A2C,#FF8A3C,#FFB079);
   background-size:300% 100%;-webkit-background-clip:text;background-clip:text;
@@ -125,6 +126,12 @@ section img, section video, section iframe{border-radius:16px;}
 #toyota-byy::before{content:"02";}
 #haryt::before{content:"03";}
 #ai-agent::before{content:"04";}
+/* ===== center all content & text site-wide ===== */
+#story,#certs,#why,#award,#cases,#toyota-byy,#haryt,#emails,#motion-videos,#ai-agent,#proof,#contact-form{text-align:center;}
+/* center eyebrow labels (line + caps) everywhere */
+#story div[style*=".28em"],#certs div[style*=".28em"],#why div[style*=".28em"],#award div[style*=".28em"],#cases div[style*=".28em"],#toyota-byy div[style*=".28em"],#haryt div[style*=".28em"],#emails div[style*=".28em"],#motion-videos div[style*=".28em"],#ai-agent div[style*=".28em"],#proof div[style*=".28em"],#contact-form div[style*=".28em"]{display:flex !important;justify-content:center !important;}
+#story p,#certs p,#why p,#award p,#cases p,#toyota-byy p,#haryt p,#emails p,#motion-videos p,#ai-agent p,#proof p,#contact-form p{margin-left:auto !important;margin-right:auto !important;}
+#story h1,#story h2,#story h3,#certs h2,#why h2,#why h3,#award h2,#award h3,#cases h2,#cases h3,#toyota-byy h2,#toyota-byy h3,#haryt h2,#haryt h3,#emails h2,#ai-agent h2,#ai-agent h3,#proof h2,#contact-form h2{margin-left:auto !important;margin-right:auto !important;}
 /* darkened certs section: force heading, body & chips to light */
 #certs h2{color:#F4ECE3 !important;}
 #certs p{color:#C7B7AC !important;}
