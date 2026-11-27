@@ -43,8 +43,12 @@ def main(src, out):
         t = t[:start] + t[i:]                      # remove from hero
         si = t.find('<section id="story"')
         ins = t.find('>', si) + 1                   # just inside the <section> opening
-        t = t[:ins] + '\n' + newblock + '\n' + t[ins:]
-        print("portrait moved into #story")
+        portrait_html = '\n' + newblock + '\n<div class="story-body">\n'
+        t = t[:ins] + portrait_html + t[ins:]
+        # close the story-body wrapper right before #story's </section>
+        sc = t.find('</section>', ins + len(portrait_html))
+        t = t[:sc] + '</div>\n' + t[sc:]
+        print("portrait moved + story-body wrapped")
     else:
         print("WARN portrait marker not found")
 
@@ -145,20 +149,32 @@ section img, section video, section iframe{border-radius:16px;}
   -webkit-text-fill-color:transparent;color:transparent !important;animation:wordHue 7s linear infinite;}
 @keyframes wordHue{0%{background-position:0% 50%;}100%{background-position:300% 50%;}}
 /* oversized Anton ghost numbers on the main experience sections */
-#cases,#toyota-byy,#haryt,#ai-agent{position:relative;overflow:hidden;}
-#cases::before,#toyota-byy::before,#haryt::before,#ai-agent::before{
-  font-family:'Anton',sans-serif;position:absolute;top:24px;right:30px;z-index:0;line-height:.8;
-  font-size:170px;color:rgba(255,138,60,.07);pointer-events:none;letter-spacing:-.02em;}
-#cases::before{content:"01";}
-#toyota-byy::before{content:"02";}
-#haryt::before{content:"03";}
-#ai-agent::before{content:"04";}
-/* ===== center all content & text site-wide ===== */
-#story,#certs,#why,#award,#cases,#toyota-byy,#haryt,#emails,#motion-videos,#ai-agent,#proof,#contact-form{text-align:center;}
-/* center eyebrow labels (line + caps) everywhere */
-#story div[style*=".28em"],#certs div[style*=".28em"],#why div[style*=".28em"],#award div[style*=".28em"],#cases div[style*=".28em"],#toyota-byy div[style*=".28em"],#haryt div[style*=".28em"],#emails div[style*=".28em"],#motion-videos div[style*=".28em"],#ai-agent div[style*=".28em"],#proof div[style*=".28em"],#contact-form div[style*=".28em"]{display:flex !important;justify-content:center !important;}
-#story p,#certs p,#why p,#award p,#cases p,#toyota-byy p,#haryt p,#emails p,#motion-videos p,#ai-agent p,#proof p,#contact-form p{margin-left:auto !important;margin-right:auto !important;}
-#story h1,#story h2,#story h3,#certs h2,#why h2,#why h3,#award h2,#award h3,#cases h2,#cases h3,#toyota-byy h2,#toyota-byy h3,#haryt h2,#haryt h3,#emails h2,#ai-agent h2,#ai-agent h3,#proof h2,#contact-form h2{margin-left:auto !important;margin-right:auto !important;}
+#why,#cases,#toyota-byy,#haryt,#ai-agent{position:relative;overflow:hidden;}
+#why::before,#cases::before,#toyota-byy::before,#haryt::before,#ai-agent::before{
+  font-family:'Anton',sans-serif;position:absolute;top:30px;right:40px;z-index:0;line-height:.8;
+  font-size:200px;color:rgba(255,138,60,.07);pointer-events:none;letter-spacing:-.02em;}
+#why::before{content:"01";}
+#cases::before{content:"02";}
+#toyota-byy::before{content:"03";}
+#haryt::before{content:"04";}
+#ai-agent::before{content:"05";}
+/* ===== EDITORIAL two-column About (#story) ===== */
+#story{display:grid !important;grid-template-columns:330px minmax(0,1fr);gap:60px;align-items:start;text-align:left;max-width:1200px;}
+.soyli-portrait{margin:0 !important;width:330px;position:sticky;top:92px;}
+.soyli-portrait>div:last-child{max-width:330px !important;margin:0 !important;}
+.story-body{text-align:left;}
+.story-body h2{max-width:none !important;}
+@media(max-width:860px){
+  #story{display:block !important;}
+  .soyli-portrait{position:static !important;margin:0 auto 30px !important;}
+}
+/* ===== BIG editorial rhythm: generous spacing + dividers ===== */
+#story,#certs,#why,#cases,#toyota-byy,#haryt,#emails,#motion-videos,#ai-agent,#proof,#contact-form{
+  padding-top:112px !important;padding-bottom:112px !important;}
+#certs,#why,#cases,#toyota-byy,#haryt,#ai-agent,#proof{position:relative;}
+#certs::after,#why::after,#cases::after,#toyota-byy::after,#haryt::after,#ai-agent::after{
+  content:"";position:absolute;left:50%;top:0;transform:translateX(-50%);width:min(1200px,90%);height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,138,60,.35),transparent);}
 /* darkened certs section: force heading, body & chips to light */
 #certs h2{color:#F4ECE3 !important;}
 #certs p{color:#C7B7AC !important;}
