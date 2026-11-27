@@ -7,6 +7,22 @@ import re, sys, pathlib
 def main(src, out):
     t = pathlib.Path(src).read_text(errors='replace')
 
+    # 0. CONTENT EDITS (run before colour map; originals carry original hexes)
+    content = {
+        # swap SalesShortcut 2nd motion video (ss-mo2-video)
+        'https://vimeo.com/1214491534?fl=tl&fe=ec':'https://vimeo.com/1223253611?fl=ip&fe=ec',
+        # hero stats -> percentage-only (and unify colour to the gold token)
+        'color:#E8D5A3;">932</div><div style="font-size:13px; color:#8C8A85; margin-top:4px;">Instagram reach · +396%</div>':
+          'color:#E8D5A3;">+396%</div><div style="font-size:13px; color:#8C8A85; margin-top:4px;">Instagram reach, 30 days</div>',
+        'color:#9DB89A;">2.8K</div><div style="font-size:13px; color:#8C8A85; margin-top:4px;">Content views · +298%</div>':
+          'color:#E8D5A3;">+298%</div><div style="font-size:13px; color:#8C8A85; margin-top:4px;">Content views, 30 days</div>',
+        'color:#9DB89A;">205</div><div style="font-size:13px; color:#8C8A85; margin-top:4px;">Content interactions · +181%</div>':
+          'color:#E8D5A3;">+181%</div><div style="font-size:13px; color:#8C8A85; margin-top:4px;">Content interactions, 30 days</div>',
+    }
+    for k,v in content.items():
+        if k in t: t = t.replace(k, v)
+        else: print("WARN content edit not found:", k[:60])
+
     # 1. FONTS: neutralize embedded, point usages to Space Grotesk
     def neut(m): return m.group(0).replace("Wix Madefor Display","__embWix").replace("IBM Plex Sans","__embPlex")
     t = re.sub(r'@font-face\s*\{[^}]*\}', neut, t)
@@ -68,12 +84,38 @@ def main(src, out):
 :root{--cr-or:#FF8A3C;--cr-rd:#FF5A2C;}
 section img, section video, section iframe{border-radius:16px;}
 ::selection{background:#FF5A2C;color:#0F0B0B;}
-/* cinematic glow top-right of hero */
-#hero{position:relative;}
-#hero::after{content:"";position:absolute;inset:-10% -5% auto auto;width:60%;height:120%;z-index:0;pointer-events:none;
-  background:radial-gradient(55% 55% at 75% 25%,rgba(255,106,30,.28),transparent 62%),
-   radial-gradient(45% 45% at 88% 55%,rgba(226,58,30,.26),transparent 64%);filter:blur(10px);}
+/* ===== ANIMATED cinematic gradient + CENTERED creative hero ===== */
+#hero{position:relative;overflow:hidden;
+  grid-template-columns:1fr !important;justify-items:center;text-align:center;
+  min-height:auto !important;padding:140px 24px 80px !important;}
+#hero::after{content:"";position:absolute;inset:-25% -15%;z-index:0;pointer-events:none;
+  background:
+   radial-gradient(42% 42% at 72% 26%,rgba(255,106,30,.40),transparent 62%),
+   radial-gradient(38% 38% at 30% 72%,rgba(226,58,30,.34),transparent 64%),
+   radial-gradient(34% 34% at 52% 48%,rgba(255,170,60,.18),transparent 66%);
+  filter:blur(26px);animation:heroGlow 16s ease-in-out infinite;}
+#hero::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.7;
+  background:conic-gradient(from 120deg at 60% 40%,rgba(255,90,44,.10),transparent 25%,rgba(255,138,60,.10) 55%,transparent 80%);
+  animation:heroSpin 26s linear infinite;}
+@keyframes heroGlow{
+  0%{transform:translate(0,0) scale(1);}
+  33%{transform:translate(-5%,4%) scale(1.14);}
+  66%{transform:translate(4%,-3%) scale(1.06);}
+  100%{transform:translate(0,0) scale(1);}}
+@keyframes heroSpin{to{transform:rotate(360deg);}}
 #hero>*{position:relative;z-index:2;}
+#hero>div{max-width:1000px;}
+#hero>div>div[style*="inline-flex"]{justify-content:center;}        /* eyebrow */
+#hero h1{font-size:clamp(46px,7.4vw,108px) !important;line-height:.96 !important;
+  letter-spacing:-.04em !important;max-width:15ch;margin:0 auto 26px !important;text-wrap:balance;}
+#hero p{margin:0 auto 34px !important;text-align:center;max-width:620px !important;}
+#hero>div>div[style*="display:flex"]{justify-content:center;}        /* CTAs + stats rows */
+#hero>div:nth-of-type(2){display:none !important;}                   /* drop hero photo: pure type hero */
+/* animated gradient emphasis words in the headline */
+#hero h1 span{background:linear-gradient(100deg,#FFB079,#FF8A3C,#FF5A2C,#FF8A3C,#FFB079);
+  background-size:300% 100%;-webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent !important;animation:wordHue 7s linear infinite;}
+@keyframes wordHue{0%{background-position:0% 50%;}100%{background-position:300% 50%;}}
 /* oversized Anton ghost numbers on the main experience sections */
 #cases,#toyota-byy,#haryt,#ai-agent{position:relative;overflow:hidden;}
 #cases::before,#toyota-byy::before,#haryt::before,#ai-agent::before{
