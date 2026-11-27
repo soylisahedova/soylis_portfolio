@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Soyli Sahedova — Portfolio</title>
+<meta name="description" content="Soyli (Sophie) Sahedova — Digital Marketing Specialist & Creative Director. Brand · Social · Paid · Motion · AI.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0F0B0B; --bg2:#1A1312; --bg3:#231917; --card:#19110F; --cardln:rgba(255,255,255,.09);
+  --ink:#F6EEE7; --ink2:#D7C9BF; --muted:#9B8B82; --dim:#6E5F58;
+  --red:#E23A1E; --orange:#FF7A2A; --amber:#FFB04A; --hot:#FF5A2C;
+  --glow1:#FF6A1E; --glow2:#C2201A; --wine:#2A0E14;
+  --r:24px; --rs:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:"Space Grotesk",system-ui,sans-serif; line-height:1.55; font-size:16px;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden;
+}
+.anton{font-family:"Anton",sans-serif;font-weight:400;text-transform:uppercase;letter-spacing:.01em}
+.wrap{max-width:1240px;margin:0 auto;padding:0 24px}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+.tag{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--muted)}
+.dot{width:12px;height:12px;border-radius:50%;background:linear-gradient(135deg,var(--orange),var(--red));display:inline-block}
+.btn{display:inline-flex;align-items:center;gap:9px;padding:14px 24px;border-radius:40px;font-weight:600;font-size:15px;
+  background:linear-gradient(135deg,var(--orange),var(--red));color:#fff;transition:transform .25s,box-shadow .25s;
+  box-shadow:0 10px 30px -10px rgba(226,58,30,.6)}
+.btn:hover{transform:translateY(-2px);box-shadow:0 16px 40px -10px rgba(226,58,30,.8)}
+.btn.ghost{background:transparent;border:1px solid var(--cardln);color:var(--ink);box-shadow:none}
+.btn.ghost:hover{border-color:var(--orange);color:var(--orange)}
+.btn svg{width:16px;height:16px}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:70;backdrop-filter:blur(12px);background:rgba(15,11,11,.72);border-bottom:1px solid var(--cardln)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;height:66px}
+.brand{font-weight:700;font-size:19px;letter-spacing:-.01em}
+.brand .dot{width:9px;height:9px;vertical-align:middle;margin-left:1px}
+.nav-links{display:flex;align-items:center;gap:26px}
+.nav-links a.lk{font-size:14px;color:var(--ink2);font-weight:500}
+.nav-links a.lk:hover{color:var(--orange)}
+.menu{display:none;background:none;border:0;color:var(--ink);font-size:24px}
+
+/* HERO */
+.hero{position:relative;padding:64px 0 54px;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:-20% -10% auto auto;width:70%;height:120%;z-index:0;
+  background:radial-gradient(60% 60% at 70% 30%,rgba(255,106,30,.55),transparent 60%),
+   radial-gradient(50% 50% at 85% 55%,rgba(194,32,26,.5),transparent 62%),
+   radial-gradient(40% 40% at 60% 70%,rgba(120,14,30,.5),transparent 65%);
+  filter:blur(8px);pointer-events:none}
+.hero::after{content:"";position:absolute;inset:0;z-index:0;opacity:.5;pointer-events:none;
+  background-image:repeating-linear-gradient(115deg,transparent 0 22px,rgba(255,120,40,.05) 22px 23px)}
+.hero-grid{position:relative;z-index:2;display:grid;grid-template-columns:1.25fr .9fr;gap:40px;align-items:center}
+.hero-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px}
+.htitle{font-size:clamp(54px,9vw,128px);line-height:.84;letter-spacing:-.01em}
+.htitle .ln2{color:transparent;-webkit-text-stroke:2px var(--ink);}
+.htitle .amp{display:inline-block;color:#fff;background:linear-gradient(135deg,var(--orange),var(--red));
+  padding:0 16px;border-radius:14px;transform:rotate(-2deg);font-size:.5em;vertical-align:middle}
+.hsub{margin:22px 0 16px;color:var(--ink2);font-size:17px;max-width:44ch}
+.hwords{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px}
+.hword{font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);
+  border:1px solid var(--cardln);border-radius:30px;padding:7px 14px}
+.hword.on{background:linear-gradient(135deg,var(--orange),var(--red));border-color:transparent}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap}
+.hero-id{display:flex;flex-direction:column;gap:3px;text-align:right}
+.hero-id .nm{font-weight:700;font-size:16px}
+.hero-id .rl{font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase}
+/* hero collage */
+.collage{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:92px;gap:12px;position:relative;z-index:2}
+.tile{border-radius:var(--rs);overflow:hidden;position:relative;border:1px solid var(--cardln);background:var(--bg2);
+  display:flex;flex-direction:column;justify-content:flex-end;padding:12px}
+.tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 25%}
+.tile .ov{position:relative;z-index:2;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.tile.big{grid-row:span 2}
+.tile.wide{grid-column:span 2}
+.tile.g1{background:linear-gradient(140deg,#E23A1E,#7A0E14)}
+.tile.g2{background:linear-gradient(140deg,#FF7A2A,#B2200F)}
+.tile.g3{background:linear-gradient(140deg,#2A0E14,#541018)}
+.tile .big-num{position:relative;z-index:2;font-family:"Anton";font-size:30px;line-height:.9;color:#fff}
+
+/* TABLE OF CONTENTS */
+.toc{position:relative;padding:60px 0;border-top:1px solid var(--cardln);border-bottom:1px solid var(--cardln);
+  background:radial-gradient(70% 160% at 20% 0%,rgba(226,58,30,.22),transparent 60%),var(--bg)}
+.toc .ghost{position:absolute;left:50%;top:38%;transform:translate(-50%,-50%);font-size:22vw;color:rgba(255,255,255,.035);
+  z-index:0;white-space:nowrap;pointer-events:none}
+.toc-in{position:relative;z-index:2}
+.toc .lab{text-align:center;margin-bottom:18px}
+.toc-row{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.toc-item{border-left:1px solid var(--cardln);padding-left:16px}
+.toc-item .n{font-family:"Anton";font-size:clamp(46px,8vw,96px);line-height:.9;
+  background:linear-gradient(180deg,#fff,#FF9A5A);-webkit-background-clip:text;background-clip:text;color:transparent}
+.toc-item .t{font-weight:600;margin-top:8px}
+.toc-item .d{font-size:13px;color:var(--muted)}
+
+/* SECTION SHELL */
+.sec{padding:72px 0}
+.sec-h{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:28px;flex-wrap:wrap}
+.sec-h h2{font-size:clamp(30px,5vw,50px);font-weight:700;letter-spacing:-.02em;line-height:1.02}
+.sec-h h2 .ac{color:var(--orange)}
+.sec-h .num{font-family:"Anton";font-size:clamp(40px,6vw,74px);color:rgba(255,255,255,.08);line-height:.8}
+
+/* BENTO */
+.bento{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+.c{background:var(--card);border:1px solid var(--cardln);border-radius:var(--r);padding:26px;position:relative;overflow:hidden;
+  transition:transform .3s,border-color .3s}
+.c:hover{transform:translateY(-4px);border-color:rgba(255,122,42,.5)}
+.c .k{font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--orange);margin-bottom:12px;display:block}
+.c h3{font-size:26px;font-weight:700;letter-spacing:-.01em;line-height:1.05;margin-bottom:10px}
+.c h3 .pt{color:var(--orange)}
+.c p{color:var(--ink2);font-size:14.5px;line-height:1.55}
+.span7{grid-column:span 7}.span5{grid-column:span 5}.span6{grid-column:span 6}
+.span4{grid-column:span 4}.span8{grid-column:span 8}.span12{grid-column:span 12}.span3{grid-column:span 3}
+.glow::after{content:"";position:absolute;width:260px;height:260px;right:-80px;top:-80px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,106,30,.35),transparent 70%);pointer-events:none}
+
+/* about card */
+.about{display:grid;grid-template-columns:.8fr 1.2fr;gap:0;align-items:stretch;padding:0;overflow:hidden}
+.about .ph{position:relative;min-height:340px;background:#000}
+.about .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 18%}
+.about .bd{padding:30px}
+.about .bd h3{font-size:34px}
+.meta-row{display:flex;gap:26px;margin-top:18px;flex-wrap:wrap}
+.meta-row .m .l{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.meta-row .m .v{font-weight:600;font-size:14px;margin-top:3px}
+
+/* metric tiles */
+.mstat{display:flex;flex-direction:column;justify-content:space-between}
+.mstat .big{font-family:"Anton";font-size:clamp(40px,5vw,62px);line-height:.85;
+  background:linear-gradient(135deg,#FF9A5A,#E23A1E);-webkit-background-clip:text;background-clip:text;color:transparent}
+.mstat .lb{color:var(--ink2);font-size:13.5px;margin-top:8px}
+
+/* tools grid */
+.tools{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:6px}
+.app{aspect-ratio:1;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  background:var(--bg2);border:1px solid var(--cardln);font-size:10.5px;color:var(--muted);font-weight:600}
+.app b{font-family:"Anton";font-size:20px;color:#fff;letter-spacing:.02em}
+.app.ps b{color:#31A8FF}.app.ai b{color:#FF9A00}.app.pr b{color:#9A9CFF}.app.ae b{color:#C9A0FF}
+.app.fg b{color:#FF5C39}.app.cv b{color:#22CAD6}.app.n8 b{color:#FF5A7A}.app.me b{color:#1A7CFF}.app.go b{color:#FBBC05}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.chip{font-size:12px;font-weight:500;color:var(--ink2);border:1px solid var(--cardln);border-radius:30px;padding:6px 13px}
+
+/* services list */
+.svc{display:grid;grid-template-columns:1fr 1fr;gap:10px 26px}
+.svc li{list-style:none;display:flex;gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid var(--cardln);font-weight:500}
+.svc li .no{font-family:"Anton";color:var(--orange);font-size:15px;min-width:26px}
+
+/* process */
+.proc{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.pcard{background:var(--card);border:1px solid var(--cardln);border-radius:var(--r);padding:24px;position:relative}
+.pcard .n{font-family:"Anton";font-size:44px;color:rgba(255,255,255,.1);line-height:.8}
+.pcard h4{font-size:19px;font-weight:700;margin:6px 0 8px}
+.pcard p{font-size:13px;color:var(--muted)}
+.pcard .get{margin-top:12px;font-size:12px;color:var(--orange);font-weight:600}
+
+/* certs / award row */
+.ach{display:grid;grid-template-columns:1.3fr 1fr;gap:16px}
+.certlist{display:flex;flex-direction:column;gap:12px;margin-top:8px}
+.certrow{display:flex;align-items:center;gap:14px;background:var(--bg2);border:1px solid var(--cardln);border-radius:14px;padding:13px 16px}
+.certrow .ico{font-family:"Anton";font-size:16px;color:var(--orange)}
+.certrow .t{font-weight:600;font-size:14px}
+.certrow .s{font-size:12px;color:var(--muted)}
+.award{background:linear-gradient(150deg,#E23A1E,#7A0E14);border:none;display:flex;flex-direction:column;justify-content:center}
+.award .trophy{font-size:34px}
+.award h3{font-size:30px;margin-top:8px}
+.award p{color:rgba(255,255,255,.85)}
+.award .yr{font-family:"Anton";font-size:60px;line-height:.9;margin-top:8px}
+
+/* contact */
+.contact{background:linear-gradient(180deg,var(--bg),#160C0C)}
+.contact-card{background:var(--card);border:1px solid var(--cardln);border-radius:var(--r);padding:44px;
+  display:grid;grid-template-columns:1.1fr .9fr;gap:40px;position:relative;overflow:hidden}
+.contact-card h2{font-size:clamp(34px,5vw,56px);font-weight:700;line-height:1;letter-spacing:-.02em}
+.contact-card h2 .ac{color:var(--orange)}
+.crow{display:flex;gap:12px;align-items:center;margin-top:14px}
+.crow .ic{width:42px;height:42px;border-radius:12px;background:var(--bg2);border:1px solid var(--cardln);display:flex;align-items:center;justify-content:center;flex:none}
+.crow .ic svg{width:18px;height:18px;stroke:var(--orange);fill:none}
+.crow .l{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.crow .v{font-weight:600;font-size:15px}
+.socials{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}
+.socials a{padding:10px 18px;border:1px solid var(--cardln);border-radius:30px;font-size:13px;font-weight:600;transition:.25s}
+.socials a:hover{background:linear-gradient(135deg,var(--orange),var(--red));border-color:transparent}
+footer{text-align:center;padding:30px;color:var(--dim);font-size:13px;border-top:1px solid var(--cardln)}
+footer b{color:var(--muted)}
+
+.rv{opacity:0;transform:translateY(22px);transition:.7s}
+.rv.in{opacity:1;transform:none}
+
+@media(max-width:920px){
+  .nav-links .lk{display:none}.menu{display:block}
+  .hero-grid{grid-template-columns:1fr;gap:28px}
+  .collage{grid-auto-rows:80px}
+  .toc-row{grid-template-columns:1fr 1fr}
+  .bento .c{grid-column:span 12 !important}
+  .about{grid-template-columns:1fr}.about .ph{min-height:260px}
+  .tools{grid-template-columns:repeat(4,1fr)}
+  .svc{grid-template-columns:1fr}
+  .proc{grid-template-columns:1fr 1fr}
+  .ach{grid-template-columns:1fr}
+  .contact-card{grid-template-columns:1fr;padding:30px}
+}
+@media(max-width:540px){
+  .wrap{padding:0 16px}
+  .htitle{font-size:19vw}
+  .toc-row{grid-template-columns:1fr 1fr}
+  .tools{grid-template-columns:repeat(3,1fr)}
+  .proc{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav-in">
+    <a href="#top" class="brand">Soyli Sahedova<span class="dot"></span></a>
+    <nav class="nav-links">
+      <a class="lk" href="#about">About</a>
+      <a class="lk" href="#work">Work</a>
+      <a class="lk" href="#automation">Automation</a>
+      <a class="lk" href="#contact">Contact</a>
+      <a class="btn" href="#contact">Let's talk</a>
+      <button class="menu">☰</button>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="wrap">
+    <div class="hero-top">
+      <span class="tag"><span class="dot"></span> Portfolio · 2026</span>
+      <span class="tag">Ho Chi Minh City · Remote</span>
+    </div>
+    <div class="hero-grid">
+      <div class="rv">
+        <div class="htitle anton">Creative<br><span class="ln2">Marketing</span><br>Portfolio<span class="amp">/26</span></div>
+        <p class="hsub">Give me a niche and I'll analyze it, build the funnel, design the creative, and run the paid campaigns — faster, with AI. One mind, the whole system.</p>
+        <div class="hwords">
+          <span class="hword on">Brand</span><span class="hword">Social</span><span class="hword">Paid Ads</span>
+          <span class="hword">Motion</span><span class="hword">Automation / AI</span>
+        </div>
+        <div class="hero-cta">
+          <a class="btn" href="#work">See proven results
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <a class="btn ghost" href="#contact">Download CV</a>
+        </div>
+      </div>
+      <div class="rv">
+        <div class="collage">
+          <div class="tile big" style="grid-row:span 3"><img src="assets/img/soyli-hero.jpg" alt="Soyli"><span class="ov" style="color:#fff">Soyli · Creative Director</span></div>
+          <div class="tile g1"><span class="big-num">+684%</span><span class="ov">LinkedIn</span></div>
+          <div class="tile g2"><span class="big-num">45K</span><span class="ov">Reached · Toyota</span></div>
+          <div class="tile g3 wide"><span class="ov" style="color:#fff">Brand · Social · Paid · Motion · AI</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TABLE OF CONTENTS -->
+<section class="toc">
+  <div class="ghost anton">CONTENTS</div>
+  <div class="wrap toc-in">
+    <div class="lab"><span class="tag"><span class="dot"></span> Table of Contents</span></div>
+    <div class="toc-row">
+      <a class="toc-item" href="#about"><div class="n anton">01</div><div class="t">About &amp; Skills</div><div class="d">Who I am · what I use</div></a>
+      <a class="toc-item" href="#work"><div class="n anton">02</div><div class="t">Work &amp; Results</div><div class="d">Real accounts, real numbers</div></a>
+      <a class="toc-item" href="#automation"><div class="n anton">03</div><div class="t">Automation</div><div class="d">AI workflows in n8n</div></a>
+      <a class="toc-item" href="#contact"><div class="n anton">04</div><div class="t">Contact</div><div class="d">Let's work together</div></a>
+    </div>
+  </div>
+</section>
+
+<!-- 01 ABOUT + SKILLS -->
+<section class="sec" id="about">
+  <div class="wrap">
+    <div class="sec-h rv"><h2>hi, i'm <span class="ac">soyli.</span></h2><div class="num anton">01</div></div>
+    <div class="bento">
+      <!-- about -->
+      <div class="c about span7 rv">
+        <div class="ph"><img src="assets/img/soyli-sitting.jpg" alt="Soyli Sahedova"></div>
+        <div class="bd">
+          <span class="k">About me</span>
+          <h3>Strategist's brain,<br>designer's eye.</h3>
+          <p>I don't just make things look good — I make them perform. Give me a niche and I take it apart, find the angle nobody's using, and turn it into a funnel that moves: sharp plan, scroll-stopping visuals, high-end motion, and Meta campaigns built to convert.</p>
+          <div class="meta-row">
+            <div class="m"><div class="l">Role</div><div class="v">Digital Marketing · Creative Director</div></div>
+            <div class="m"><div class="l">Based</div><div class="v">Ho Chi Minh City · Remote</div></div>
+            <div class="m"><div class="l">English</div><div class="v">C2 Proficient · EF SET 86</div></div>
+          </div>
+        </div>
+      </div>
+      <!-- metric -->
+      <div class="c mstat span5 glow rv">
+        <span class="k">Growth I drove · 30 days</span>
+        <div class="big anton">+684.9%</div>
+        <div class="lb">LinkedIn impressions on a brand-new account. Plus +396% reach (932), +298% views (2.8K), +181% interactions.</div>
+      </div>
+      <!-- skills + tools -->
+      <div class="c span7 rv">
+        <span class="k">Skills + tools</span>
+        <h3>Everything I <span class="pt">build with.</span></h3>
+        <div class="tools">
+          <div class="app ps"><b>Ps</b>Photoshop</div>
+          <div class="app ai"><b>Ai</b>Illustrator</div>
+          <div class="app pr"><b>Pr</b>Premiere</div>
+          <div class="app ae"><b>Ae</b>After FX</div>
+          <div class="app fg"><b>Fg</b>Figma</div>
+          <div class="app cv"><b>Cv</b>Canva</div>
+          <div class="app n8"><b>n8</b>n8n</div>
+          <div class="app me"><b>Me</b>Meta Ads</div>
+          <div class="app go"><b>Go</b>Google Ads</div>
+          <div class="app"><b>AI</b>AI Tools</div>
+        </div>
+      </div>
+      <!-- services -->
+      <div class="c span5 rv">
+        <span class="k">What I do</span>
+        <ul class="svc">
+          <li><span class="no anton">01</span>Marketing strategy &amp; funnels</li>
+          <li><span class="no anton">02</span>Paid ads · Meta &amp; Google</li>
+          <li><span class="no anton">03</span>Content &amp; creative direction</li>
+          <li><span class="no anton">04</span>SEO &amp; analytics</li>
+          <li><span class="no anton">05</span>Email marketing</li>
+          <li><span class="no anton">06</span>AI workflows · n8n</li>
+          <li><span class="no anton">07</span>Motion &amp; video editing</li>
+          <li><span class="no anton">08</span>Brand strategy</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 WORK -->
+<section class="sec" id="work">
+  <div class="wrap">
+    <div class="sec-h rv"><h2>real accounts. <span class="ac">real numbers.</span></h2><div class="num anton">02</div></div>
+    <div class="bento">
+      <!-- SalesShortcut feature -->
+      <div class="c span8 glow rv">
+        <span class="k">Case study · US SaaS market</span>
+        <h3>SalesShortcut — <span class="pt">built from zero.</span></h3>
+        <p>I grew this US company's account from nothing — organic social and Reddit outreach turning a brand-new page into a measurable growth engine.</p>
+        <div class="meta-row" style="margin-top:22px">
+          <div class="m"><div class="l">LinkedIn · 30d</div><div class="v" style="font-family:Anton;font-size:22px;color:#FF9A5A">+684.9%</div></div>
+          <div class="m"><div class="l">Reach</div><div class="v" style="font-family:Anton;font-size:22px;color:#FF9A5A">+396%</div></div>
+          <div class="m"><div class="l">Views</div><div class="v" style="font-family:Anton;font-size:22px;color:#FF9A5A">+298%</div></div>
+          <div class="m"><div class="l">Interactions</div><div class="v" style="font-family:Anton;font-size:22px;color:#FF9A5A">+181%</div></div>
+        </div>
+      </div>
+      <!-- Toyota -->
+      <div class="c span4 rv" style="background:linear-gradient(150deg,#1A1312,#2A0E10)">
+        <span class="k">Toyota BYY · Meta Ads</span>
+        <h3>Ads that <span class="pt">reach.</span></h3>
+        <p>Post design, ad creative &amp; Meta campaign setup for @toyota_byy.</p>
+        <div class="meta-row" style="margin-top:16px">
+          <div class="m"><div class="l">Reached</div><div class="v" style="font-family:Anton;font-size:22px;color:#FF9A5A">45,209</div></div>
+          <div class="m"><div class="l">Per visit</div><div class="v" style="font-family:Anton;font-size:22px;color:#FF9A5A">$0.08</div></div>
+        </div>
+      </div>
+      <!-- 100haryt -->
+      <div class="c span4 rv">
+        <span class="k">100haryt.com · E-commerce</span>
+        <h3>Daily <span class="pt">creative.</span></h3>
+        <p>Landing-page banners and social posts for a 100,000+ product marketplace — always on-brand.</p>
+      </div>
+      <!-- social mgmt -->
+      <div class="c span4 rv">
+        <span class="k">Social · Multiple brands</span>
+        <h3>many feeds,<br><span class="pt">one eye.</span></h3>
+        <p>I run multiple brand pages at once — each one its own voice, look and posting rhythm.</p>
+      </div>
+      <!-- email -->
+      <div class="c span4 rv">
+        <span class="k">Email · SalesShortcut</span>
+        <h3>emails people <span class="pt">open.</span></h3>
+        <p>A 4-step outreach sequence, sent by an n8n workflow that finds leads, personalizes with AI and sends them one by one.</p>
+      </div>
+      <!-- motion -->
+      <div class="c span12 rv" style="background:linear-gradient(120deg,#19110F,#2A0E10)">
+        <span class="k">Motion graphics</span>
+        <h3>motion that <span class="pt">stops the scroll.</span></h3>
+        <p>Logo animations, product promos and social videos — 2D motion for DHL Turkmenistan, GSR Network &amp; Toyota BYY, built in After Effects.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="sec">
+  <div class="wrap">
+    <div class="sec-h rv"><h2>four clear <span class="ac">phases.</span></h2></div>
+    <div class="proc">
+      <div class="pcard rv"><div class="n anton">01</div><h4>Analyze</h4><p>I study your business, vision, niche and competitors — so the plan is built on facts.</p><div class="get">→ Where you stand</div></div>
+      <div class="pcard rv"><div class="n anton">02</div><h4>Plan</h4><p>A full content plan showing exactly how each asset drives growth.</p><div class="get">→ Roadmap tied to results</div></div>
+      <div class="pcard rv"><div class="n anton">03</div><h4>Execute</h4><p>Daily content — motion and static — polished and ready to publish, on schedule.</p><div class="get">→ Scroll-stopping creative</div></div>
+      <div class="pcard rv"><div class="n anton">04</div><h4>Distribute</h4><p>Targeted ads on Instagram, Facebook &amp; Google with precise audiences and budgets.</p><div class="get">→ High-converting campaigns</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ACHIEVEMENTS -->
+<section class="sec">
+  <div class="wrap">
+    <div class="sec-h rv"><h2>certified &amp; <span class="ac">recognized.</span></h2></div>
+    <div class="ach">
+      <div class="c rv">
+        <span class="k">Certifications</span>
+        <div class="certlist">
+          <div class="certrow"><span class="ico anton">G</span><div><div class="t">Digital Marketing &amp; E-commerce</div><div class="s">Google · via Coursera</div></div></div>
+          <div class="certrow"><span class="ico anton">IT</span><div><div class="t">Digital Marketing</div><div class="s">Illinois Tech · via Coursera</div></div></div>
+          <div class="certrow"><span class="ico anton">IBM</span><div><div class="t">Growth Hacking — Capstone</div><div class="s">IBM · via Coursera</div></div></div>
+          <div class="certrow"><span class="ico anton">EF</span><div><div class="t">English — C2 Proficient</div><div class="s">EF SET · 86 / 100</div></div></div>
+        </div>
+      </div>
+      <div class="c award rv">
+        <div class="trophy">🏆</div>
+        <span class="k" style="color:rgba(255,255,255,.8)">Recognition</span>
+        <h3>Employee of the Year</h3>
+        <p>Awarded for consistent, high-impact work — the person the whole team relies on to deliver.</p>
+        <div class="yr anton">2024</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 AUTOMATION -->
+<section class="sec" id="automation">
+  <div class="wrap">
+    <div class="sec-h rv"><h2>i don't just run marketing — <span class="ac">i automate it.</span></h2><div class="num anton">03</div></div>
+    <div class="bento">
+      <div class="c span7 glow rv">
+        <span class="k">Automation · n8n</span>
+        <h3>AI Marketing <span class="pt">Agent.</span></h3>
+        <p>I build AI workflows in n8n. My agent takes a single business, analyzes it with its competitors and niche, then returns a ready-to-use marketing funnel, a promotion planner, and the first 10 concrete steps to start growing — automatically.</p>
+        <div class="chips">
+          <span class="chip">Business analysis</span><span class="chip">Competitor analysis</span>
+          <span class="chip">Niche insight</span><span class="chip">Funnel + promo plan</span><span class="chip">First 10 steps</span>
+        </div>
+      </div>
+      <div class="c span5 rv" style="background:linear-gradient(150deg,#1A1312,#2A0E10)">
+        <span class="k">How it runs</span>
+        <h3>one request in,<br><span class="pt">a growth report out.</span></h3>
+        <p>Built end-to-end in n8n. Fetch → extract → business &amp; competitor analysis → funnel architect → promotion planner → assemble → document.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="sec contact" id="contact">
+  <div class="wrap">
+    <div class="contact-card rv">
+      <div>
+        <span class="k" style="color:var(--orange);font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:600">Contact · 04</span>
+        <h2 style="margin-top:10px">let's work <span class="ac">together.</span></h2>
+        <p style="color:var(--ink2);margin-top:14px;max-width:38ch">Open to on-site, hybrid &amp; remote roles — and freelance projects. Let's build something that grows.</p>
+        <div class="socials">
+          <a href="https://linkedin.com/in/soyli-sahedova">LinkedIn</a>
+          <a href="https://behance.net/soylisahedova">Behance</a>
+          <a href="https://soylisportfolio.com">Portfolio</a>
+        </div>
+      </div>
+      <div>
+        <div class="crow"><div class="ic"><svg viewBox="0 0 24 24" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></div><div><div class="l">Email</div><a class="v" href="mailto:sahedowasoyli8@gmail.com">sahedowasoyli8@gmail.com</a></div></div>
+        <div class="crow"><div class="ic"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z"/></svg></div><div><div class="l">Phone · WhatsApp</div><a class="v" href="https://wa.me/84931806573">+84 931 806 573</a></div></div>
+        <div class="crow"><div class="ic"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0Z"/><circle cx="12" cy="10" r="3"/></svg></div><div><div class="l">Location</div><span class="v">Ho Chi Minh City · On-site / Hybrid / Remote</span></div></div>
+        <div class="crow"><div class="ic"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7Z"/></svg></div><div><div class="l">Telegram</div><span class="v">@soyli_s</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>© 2026 <b>Soyli (Sophie) Sahedova</b> · Digital Marketing Specialist &amp; Creative Director · Ho Chi Minh City</footer>
+
+<script>
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.1});
+document.querySelectorAll('.rv').forEach((el,i)=>{el.style.transitionDelay=(i%3*70)+'ms';io.observe(el)});
+</script>
+</body>
+</html>
