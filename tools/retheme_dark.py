@@ -23,6 +23,31 @@ def main(src, out):
         if k in t: t = t.replace(k, v)
         else: print("WARN content edit not found:", k[:60])
 
+    # 0b. MOVE the portrait out of the hero into the About (#story) section
+    marker = '<div style="position:relative; display:flex; justify-content:center;">'
+    ps = t.find('data-slot="profile-photo"')
+    start = t.rfind(marker, 0, ps)
+    if start != -1:
+        # balanced <div> match
+        i = start; depth = 0
+        while i < len(t):
+            nd = t.find('<div', i); nc = t.find('</div>', i)
+            if nc == -1: break
+            if nd != -1 and nd < nc:
+                depth += 1; i = nd + 4
+            else:
+                depth -= 1; i = nc + 6
+                if depth == 0: break
+        block = t[start:i]
+        newblock = block.replace(marker, '<div class="soyli-portrait" style="position:relative; display:flex; justify-content:center;">', 1)
+        t = t[:start] + t[i:]                      # remove from hero
+        si = t.find('<section id="story"')
+        ins = t.find('>', si) + 1                   # just inside the <section> opening
+        t = t[:ins] + '\n' + newblock + '\n' + t[ins:]
+        print("portrait moved into #story")
+    else:
+        print("WARN portrait marker not found")
+
     # 1. FONTS: neutralize embedded, point usages to Space Grotesk
     def neut(m): return m.group(0).replace("Wix Madefor Display","__embWix").replace("IBM Plex Sans","__embPlex")
     t = re.sub(r'@font-face\s*\{[^}]*\}', neut, t)
@@ -110,8 +135,10 @@ section img, section video, section iframe{border-radius:16px;}
   letter-spacing:-.04em !important;max-width:15ch;margin:0 auto 26px !important;text-wrap:balance;}
 #hero p{margin:0 auto 34px !important;text-align:center;max-width:620px !important;}
 #hero>div>div[style*="display:flex"]{justify-content:center;}        /* CTAs + stats rows */
-#hero>div:nth-of-type(2){display:block !important;width:min(320px,78vw);margin:50px auto 0;}  /* centered framed portrait */
-#hero>div:nth-of-type(2)>div{margin:0 auto !important;}
+/* portrait now lives in #story (About). Compose it as an editorial anchor. */
+.soyli-portrait{width:min(360px,82vw);margin:0 auto 30px;}
+.soyli-portrait>div:last-child{max-width:360px !important;margin:0 auto !important;}
+#story{padding-top:96px !important;}
 /* animated gradient emphasis words in the headline */
 #hero h1 span{background:linear-gradient(100deg,#FFB079,#FF8A3C,#FF5A2C,#FF8A3C,#FFB079);
   background-size:300% 100%;-webkit-background-clip:text;background-clip:text;
